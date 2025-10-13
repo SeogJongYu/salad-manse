@@ -1,0 +1,75 @@
+{
+  "path": "cz-conventional-changelog",
+  "types": {
+    "feat": {
+      "description": "새로운 기능",
+      "title": "Features"
+    },
+    "fix": {
+      "description": "버그 수정",
+      "title": "Bug Fixes"
+    },
+    "docs": {
+      "description": "문서 수정",
+      "title": "Documentation"
+    },
+    "style": {
+      "description": "코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우",
+      "title": "Styles"
+    },
+    "refactor": {
+      "description": "코드 리팩터링",
+      "title": "Code Refactoring"
+    },
+    "perf": {
+      "description": "성능 개선",
+      "title": "Performance Improvements"
+    },
+    "test": {
+      "description": "테스트 추가, 테스트 리팩터링",
+      "title": "Tests"
+    },
+    "build": {
+      "description": "빌드 시스템 또는 외부 종속성에 영향을 주는 변경사항",
+      "title": "Builds"
+    },
+    "ci": {
+      "description": "CI 설정 파일 수정",
+      "title": "Continuous Integrations"
+    },
+    "chore": {
+      "description": "빌드 업무 수정, 패키지 매니저 수정",
+      "title": "Chores"
+    },
+    "revert": {
+      "description": "이전 커밋 되돌리기",
+      "title": "Reverts"
+    }
+  },
+  "scopes": [
+    "component",
+    "util",
+    "config",
+    "deps",
+    "api",
+    "ui",
+    "style",
+    "test"
+  ],
+  "allowTicketNumber": false,
+  "isTicketNumberRequired": false,
+  "ticketNumberPrefix": "TICKET-",
+  "ticketNumberRegExp": "\\d{1,5}",
+  "allowCustomScopes": true,
+  "allowBreakingChanges": [
+    "feat",
+    "fix"
+  ],
+  "skipQuestions": [
+    "ticketNumber"
+  ],
+  "subjectLimit": 100,
+  "breaklineChar": "|",
+  "footerPrefix": "ISSUES CLOSED:",
+  "askForBreakingChangeFirst": true
+}
