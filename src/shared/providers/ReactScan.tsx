@@ -1,13 +1,12 @@
 /* eslint-disable import/order */
 'use client';
-// react-scan must be imported before react
 import { scan } from 'react-scan';
 import { JSX, useEffect } from 'react';
 
 export function ReactScan(): JSX.Element {
   useEffect(() => {
     scan({
-      enabled: true,
+      enabled: process.env.NODE_ENV === 'development',
     });
   }, []);
 
