@@ -1,0 +1,139 @@
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes float-reverse {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  33% {
+    transform: translateY(-10px) translateX(5px);
+  }
+  66% {
+    transform: translateY(-5px) translateX(-5px);
+  }
+}
+
+@keyframes float-reverse-slow {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  33% {
+    transform: translateY(8px) translateX(-5px);
+  }
+  66% {
+    transform: translateY(12px) translateX(5px);
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1) rotate(45deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2) rotate(90deg);
+  }
+}
+
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes slide-right {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 3s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 4s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+.animate-float-reverse-slow {
+  animation: float-reverse-slow 7s ease-in-out infinite;
+}
+
+.animate-twinkle {
+  animation: twinkle 2s ease-in-out infinite;
+}
+
+.animate-twinkle-delayed {
+  animation: twinkle 2s ease-in-out infinite;
+  animation-delay: 0.7s;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
+.animate-bounce-slow {
+  animation: bounce 3s infinite;
+}
+
+.animate-bounce-slower {
+  animation: bounce 4s infinite;
+}
+
+.animate-slide-right {
+  animation: slide-right 0.4s ease-out;
+}
+
+.animate-slide-left {
+  animation: slide-left 0.4s ease-out;
+}
