@@ -23,9 +23,13 @@ export default function HealthGoalStep({
 
   return (
     <div>
-      <h2 className="mb-4 text-lg font-semibold">
-        샐러드를 드시는 주된 이유는 무엇인가요?
-      </h2>
+      <div className="mb-6 text-center">
+        <div className="mb-2 text-3xl">🌱</div>
+        <h2 className="mb-2 text-xl font-bold text-emerald-700">목적</h2>
+        <p className="text-sm text-emerald-600">
+          샐러드를 드시는 주된 이유는 무엇인가요?
+        </p>
+      </div>
       <RadioGroup
         value={selectedValue?.goal}
         className="grid grid-cols-1 gap-4 lg:grid-cols-2"
