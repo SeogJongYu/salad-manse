@@ -25,7 +25,11 @@ export default function BloodSugarStep({
 
   return (
     <div>
-      <h2 className="mb-4 text-lg font-semibold">혈당은 어떤 편인가요?</h2>
+      <div className="mb-6 text-center">
+        <div className="mb-2 text-3xl">🍯</div>
+        <h2 className="mb-2 text-xl font-bold text-sky-700">혈당 관리</h2>
+        <p className="text-sm text-sky-600">혈당은 어떤 편인가요?</p>
+      </div>
       <RadioGroup
         value={selectedValue?.bloodSugar}
         className="grid grid-cols-1 gap-4 lg:grid-cols-2"
