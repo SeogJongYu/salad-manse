@@ -9,8 +9,6 @@ import type { PreferencePayload } from '@/features/preference/types';
 import { Progress } from '@/shared/components/atoms/Progress';
 import { useQueryState } from '@/shared/hooks/useQueryState';
 
-export type PreferenceType = 'step' | 'goal' | 'bp' | 'cholesterol';
-
 export default function PreferencePage() {
   const [queryState, setQueryState] = useQueryState<
     Partial<PreferencePayload> & { step: string }
@@ -68,11 +66,7 @@ export default function PreferencePage() {
         )}
         {currentStep === 4 && (
           <BloodSugarStep
-            defaultValue={
-              queryState.bloodSugar
-                ? { bloodSugar: queryState.bloodSugar }
-                : undefined
-            }
+            defaultValue={queryState.bs ? { bs: queryState.bs } : undefined}
             onNext={handleNext}
             onPrevious={handlePrevious}
           />
