@@ -5,6 +5,7 @@ import BloodPressureStep from '@/features/preference/components/organisms/BloodP
 import BloodSugarStep from '@/features/preference/components/organisms/BloodSugarStep';
 import CholesterolStep from '@/features/preference/components/organisms/CholesterolStep';
 import HealthGoalStep from '@/features/preference/components/organisms/HealthGoalStep';
+import LoadingStep from '@/features/preference/components/organisms/LoadingStep';
 import type { PreferencePayload } from '@/features/preference/types';
 import { Progress } from '@/shared/components/atoms/Progress';
 import { useQueryState } from '@/shared/hooks/useQueryState';
@@ -35,8 +36,10 @@ export default function PreferencePage() {
 
   return (
     <ViewTransition>
-      <div className="px-4 pt-4 pb-[60px]">
-        <Progress value={currentStep - 1} max={4} className="mb-8" />
+      <div className="h-(--content-height) px-4 pt-4 pb-[60px]">
+        {currentStep <= 4 && (
+          <Progress value={currentStep - 1} max={4} className="mb-8" />
+        )}
 
         {currentStep === 1 && (
           <HealthGoalStep
@@ -71,6 +74,7 @@ export default function PreferencePage() {
             onPrevious={handlePrevious}
           />
         )}
+        {currentStep === 5 && <LoadingStep />}
       </div>
     </ViewTransition>
   );
