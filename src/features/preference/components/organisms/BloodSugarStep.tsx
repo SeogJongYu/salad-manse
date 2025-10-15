@@ -12,7 +12,7 @@ interface BloodSugarStepProps {
   onPrevious: () => void;
 }
 
-type BloodSugarStepData = Pick<PreferencePayload, 'bloodSugar'>;
+type BloodSugarStepData = Pick<PreferencePayload, 'bs'>;
 
 export default function BloodSugarStep({
   defaultValue,
@@ -31,9 +31,9 @@ export default function BloodSugarStep({
         <p className="text-sm text-sky-600">혈당은 어떤 편인가요?</p>
       </div>
       <RadioGroup
-        value={selectedValue?.bloodSugar}
+        value={selectedValue?.bs}
         className="grid grid-cols-1 gap-4 lg:grid-cols-2"
-        onValueChange={value => setSelectedValue({ bloodSugar: value })}
+        onValueChange={value => setSelectedValue({ bs: value })}
       >
         {bloodSugarOptions.map(option => (
           <RadioCard
