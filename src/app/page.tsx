@@ -64,7 +64,7 @@ export default function Home() {
                   몇 가지 간단한 질문으로 내 몸에 꼭 맞는 샐러드 조합과 레시피를
                   추천받으세요.
                 </p>
-                <Link href="/preference">
+                <Link href="/preference?step=1">
                   <Button size="xl" className="w-full">
                     내 맞춤 샐러드 찾기
                     <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
