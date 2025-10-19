@@ -30,7 +30,8 @@ export default function BloodSugarStep({
       <RadioGroup
         value={selectedValue}
         className="grid grid-cols-1 gap-4 lg:grid-cols-2"
-        onValueChange={setSelectedValue}>
+        onValueChange={setSelectedValue}
+      >
         {bloodSugarOptions.map(option => (
           <RadioCard
             key={option.value}
@@ -49,7 +50,8 @@ export default function BloodSugarStep({
           onClick={() => {
             if (!selectedValue) return;
             onNext(selectedValue);
-          }}>
+          }}
+        >
           결과보기
         </StepNavigation.Next>
       </StepNavigation>

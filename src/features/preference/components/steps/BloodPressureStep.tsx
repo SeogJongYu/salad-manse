@@ -30,7 +30,8 @@ export default function BloodPressureStep({
       <RadioGroup
         value={selectedValue}
         className="grid grid-cols-1 gap-4 lg:grid-cols-2"
-        onValueChange={setSelectedValue}>
+        onValueChange={setSelectedValue}
+      >
         {bloodPressureOptions.map(option => (
           <RadioCard
             key={option.value}

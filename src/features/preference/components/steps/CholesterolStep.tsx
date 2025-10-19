@@ -34,7 +34,8 @@ export default function CholesterolStep({
       <RadioGroup
         value={selectedValue}
         className="grid grid-cols-1 gap-4 lg:grid-cols-2"
-        onValueChange={setSelectedValue}>
+        onValueChange={setSelectedValue}
+      >
         {cholesterolOptions.map(option => (
           <RadioCard
             key={option.value}
