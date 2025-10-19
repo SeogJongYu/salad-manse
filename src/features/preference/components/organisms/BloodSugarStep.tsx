@@ -2,25 +2,22 @@ import { useState } from 'react';
 
 import StepNavigation from '@/features/preference/components/molecules/StepNavigation';
 import { bloodSugarOptions } from '@/features/preference/constants/options';
-import type { PreferencePayload } from '@/features/preference/types';
 import { RadioGroup } from '@/shared/components/atoms/RadioGroup';
 import RadioCard from '@/shared/components/molecules/RadioCard';
 
 interface BloodSugarStepProps {
-  defaultValue?: BloodSugarStepData;
-  onNext: (value: BloodSugarStepData) => void;
+  defaultValue?: string;
+  onNext: (value: string) => void;
   onPrevious: () => void;
 }
-
-type BloodSugarStepData = Pick<PreferencePayload, 'bs'>;
 
 export default function BloodSugarStep({
   defaultValue,
   onNext,
   onPrevious,
 }: BloodSugarStepProps) {
-  const [selectedValue, setSelectedValue] = useState<BloodSugarStepData | null>(
-    defaultValue || null,
+  const [selectedValue, setSelectedValue] = useState<string | undefined>(
+    defaultValue,
   );
 
   return (
@@ -31,9 +28,9 @@ export default function BloodSugarStep({
         <p className="text-sm text-sky-600">혈당은 어떤 편인가요?</p>
       </div>
       <RadioGroup
-        value={selectedValue?.bs}
+        value={selectedValue}
         className="grid grid-cols-1 gap-4 lg:grid-cols-2"
-        onValueChange={value => setSelectedValue({ bs: value })}
+        onValueChange={setSelectedValue}
       >
         {bloodSugarOptions.map(option => (
           <RadioCard

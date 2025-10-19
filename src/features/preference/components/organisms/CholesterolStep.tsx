@@ -2,25 +2,23 @@ import { useState } from 'react';
 
 import StepNavigation from '@/features/preference/components/molecules/StepNavigation';
 import { cholesterolOptions } from '@/features/preference/constants/options';
-import type { PreferencePayload } from '@/features/preference/types';
 import { RadioGroup } from '@/shared/components/atoms/RadioGroup';
 import RadioCard from '@/shared/components/molecules/RadioCard';
 
 interface CholesterolStepProps {
-  defaultValue?: CholesterolStepData;
-  onNext: (value: CholesterolStepData) => void;
+  defaultValue?: string;
+  onNext: (value: string) => void;
   onPrevious: () => void;
 }
-
-type CholesterolStepData = Pick<PreferencePayload, 'cholesterol'>;
 
 export default function CholesterolStep({
   defaultValue,
   onNext,
   onPrevious,
 }: CholesterolStepProps) {
-  const [selectedValue, setSelectedValue] =
-    useState<CholesterolStepData | null>(defaultValue || null);
+  const [selectedValue, setSelectedValue] = useState<string | undefined>(
+    defaultValue,
+  );
 
   return (
     <div>
@@ -34,9 +32,9 @@ export default function CholesterolStep({
         </p>
       </div>
       <RadioGroup
-        value={selectedValue?.cholesterol}
+        value={selectedValue}
         className="grid grid-cols-1 gap-4 lg:grid-cols-2"
-        onValueChange={value => setSelectedValue({ cholesterol: value })}
+        onValueChange={setSelectedValue}
       >
         {cholesterolOptions.map(option => (
           <RadioCard

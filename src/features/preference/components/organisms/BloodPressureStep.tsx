@@ -2,25 +2,23 @@ import { useState } from 'react';
 
 import StepNavigation from '@/features/preference/components/molecules/StepNavigation';
 import { bloodPressureOptions } from '@/features/preference/constants/options';
-import type { PreferencePayload } from '@/features/preference/types';
 import { RadioGroup } from '@/shared/components/atoms/RadioGroup';
 import RadioCard from '@/shared/components/molecules/RadioCard';
 
 interface BloodPressureStepProps {
-  defaultValue?: BloodPressureStepData;
-  onNext: (value: BloodPressureStepData) => void;
+  defaultValue?: string;
+  onNext: (value: string) => void;
   onPrevious: () => void;
 }
-
-type BloodPressureStepData = Pick<PreferencePayload, 'bp'>;
 
 export default function BloodPressureStep({
   defaultValue,
   onNext,
   onPrevious,
 }: BloodPressureStepProps) {
-  const [selectedValue, setSelectedValue] =
-    useState<BloodPressureStepData | null>(defaultValue || null);
+  const [selectedValue, setSelectedValue] = useState<string | undefined>(
+    defaultValue,
+  );
 
   return (
     <div>
@@ -30,9 +28,9 @@ export default function BloodPressureStep({
         <p className="text-sm text-rose-600">혈압은 어떤 편인가요?</p>
       </div>
       <RadioGroup
-        value={selectedValue?.bp}
+        value={selectedValue}
         className="grid grid-cols-1 gap-4 lg:grid-cols-2"
-        onValueChange={value => setSelectedValue({ bp: value })}
+        onValueChange={setSelectedValue}
       >
         {bloodPressureOptions.map(option => (
           <RadioCard
