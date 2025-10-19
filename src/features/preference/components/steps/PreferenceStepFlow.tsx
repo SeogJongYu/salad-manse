@@ -1,16 +1,16 @@
 'use client';
 import { unstable_ViewTransition as ViewTransition } from 'react';
 
-import BloodPressureStep from '@/features/preference/components/organisms/BloodPressureStep';
-import BloodSugarStep from '@/features/preference/components/organisms/BloodSugarStep';
-import CholesterolStep from '@/features/preference/components/organisms/CholesterolStep';
-import HealthGoalStep from '@/features/preference/components/organisms/HealthGoalStep';
-import LoadingStep from '@/features/preference/components/organisms/LoadingStep';
+import BloodPressureStep from '@/features/preference/components/steps/BloodPressureStep';
+import BloodSugarStep from '@/features/preference/components/steps/BloodSugarStep';
+import CholesterolStep from '@/features/preference/components/steps/CholesterolStep';
+import HealthGoalStep from '@/features/preference/components/steps/HealthGoalStep';
+import LoadingStep from '@/features/preference/components/steps/LoadingStep';
 import {
   PreferenceStoreHydrationBoundary,
   usePreferenceStore,
 } from '@/features/preference/providers/PreferenceStoreProvider';
-import { Progress } from '@/shared/components/atoms/Progress';
+import { Progress } from '@/shared/components/ui/Progress';
 import { useQueryState } from '@/shared/hooks/useQueryState';
 
 export default function PreferenceStepFlow() {

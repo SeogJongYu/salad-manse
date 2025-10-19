@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
-import { ReactScan } from '@/shared/providers/ReactScan';
+import { ReactScan } from '@/shared/modules/ReactScan';
 
 import './globals.css';
 import './animations.css';
@@ -30,8 +30,7 @@ export default function RootLayout({
     <html lang="ko">
       <ReactScan />
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
       </body>
     </html>

@@ -1,6 +1,6 @@
 import { type PropsWithChildren } from 'react';
 
-import Header from '@/shared/components/organisms/Header';
+import Header from '@/shared/components/layout/Header';
 
 export default function InteractionLayout({ children }: PropsWithChildren) {
   return (

@@ -1,19 +1,21 @@
 import { useState } from 'react';
 
-import StepNavigation from '@/features/preference/components/molecules/StepNavigation';
-import { healthGoalOptions } from '@/features/preference/constants/options';
-import { RadioGroup } from '@/shared/components/atoms/RadioGroup';
-import RadioCard from '@/shared/components/molecules/RadioCard';
+import StepNavigation from '@/features/preference/components/StepNavigation';
+import { bloodPressureOptions } from '@/features/preference/constants/options';
+import RadioCard from '@/shared/components/ui/RadioCard';
+import { RadioGroup } from '@/shared/components/ui/RadioGroup';
 
-interface HealthGoalStepProps {
+interface BloodPressureStepProps {
   defaultValue?: string;
   onNext: (value: string) => void;
+  onPrevious: () => void;
 }
 
-export default function HealthGoalStep({
+export default function BloodPressureStep({
   defaultValue,
   onNext,
-}: HealthGoalStepProps) {
+  onPrevious,
+}: BloodPressureStepProps) {
   const [selectedValue, setSelectedValue] = useState<string | undefined>(
     defaultValue,
   );
@@ -21,18 +23,15 @@ export default function HealthGoalStep({
   return (
     <div>
       <div className="mb-6 text-center">
-        <div className="mb-2 text-3xl">🌱</div>
-        <h2 className="mb-2 text-xl font-bold text-emerald-700">목적</h2>
-        <p className="text-sm text-emerald-600">
-          샐러드를 드시는 주된 이유는 무엇인가요?
-        </p>
+        <div className="mb-2 text-3xl">❤️</div>
+        <h2 className="mb-2 text-xl font-bold text-rose-700">혈압 관리</h2>
+        <p className="text-sm text-rose-600">혈압은 어떤 편인가요?</p>
       </div>
       <RadioGroup
         value={selectedValue}
         className="grid grid-cols-1 gap-4 lg:grid-cols-2"
-        onValueChange={setSelectedValue}
-      >
-        {healthGoalOptions.map(option => (
+        onValueChange={setSelectedValue}>
+        {bloodPressureOptions.map(option => (
           <RadioCard
             key={option.value}
             id={option.value}
@@ -44,6 +43,7 @@ export default function HealthGoalStep({
       </RadioGroup>
 
       <StepNavigation>
+        <StepNavigation.Previous onClick={onPrevious} />
         <StepNavigation.Next
           disabled={!selectedValue}
           onClick={() => {

@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react';
 
-import { Checkbox } from '@/shared/components/atoms/Checkbox';
-import { Label } from '@/shared/components/atoms/Label';
+import { Checkbox } from '@/shared/components/ui/Checkbox';
+import { Label } from '@/shared/components/ui/Label';
 
 interface CheckboxCardProps extends ComponentProps<typeof Checkbox> {
   label?: string;

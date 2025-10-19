@@ -1,7 +1,7 @@
 import type { ComponentProps } from 'react';
 
-import { Label } from '@/shared/components/atoms/Label';
-import { RadioGroupItem } from '@/shared/components/atoms/RadioGroup';
+import { Label } from '@/shared/components/ui/Label';
+import { RadioGroupItem } from '@/shared/components/ui/RadioGroup';
 
 interface RadioCardProps extends ComponentProps<typeof RadioGroupItem> {
   label?: string;
@@ -18,8 +18,7 @@ export default function RadioCard({
   return (
     <Label
       htmlFor={id}
-      className="hover:bg-accent/50 border-border has-[[aria-checked=true]]:border-primary! dark:has-[[aria-checked=true]]:border-primary flex cursor-pointer items-center gap-3 rounded-lg border bg-white p-3 py-4 has-[[aria-checked=true]]:bg-green-50 dark:has-[[aria-checked=true]]:bg-green-950"
-    >
+      className="hover:bg-accent/50 border-border has-[[aria-checked=true]]:border-primary! dark:has-[[aria-checked=true]]:border-primary flex cursor-pointer items-center gap-3 rounded-lg border bg-white p-3 py-4 has-[[aria-checked=true]]:bg-green-50 dark:has-[[aria-checked=true]]:bg-green-950">
       <RadioGroupItem
         id={id}
         className="data-[state=checked]:border-primary dark:data-[state=checked]:border-primary data-[state=checked]:text-white"

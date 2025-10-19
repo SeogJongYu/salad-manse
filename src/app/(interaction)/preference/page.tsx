@@ -1,4 +1,4 @@
-import PreferenceStepFlow from '@/features/preference/components/organisms/PreferenceStepFlow';
+import PreferenceStepFlow from '@/features/preference/components/steps/PreferenceStepFlow';
 import { PreferenceStoreProvider } from '@/features/preference/providers/PreferenceStoreProvider';
 
 export default function PreferencePage() {

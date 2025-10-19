@@ -44,8 +44,7 @@ export default function LoadingStep() {
           <div className="relative mx-auto h-32 w-32">
             <svg
               className="h-32 w-32 -rotate-90 transform"
-              viewBox="0 0 100 100"
-            >
+              viewBox="0 0 100 100">
               {/* 배경 원 */}
               <circle
                 cx="50"
@@ -81,8 +80,7 @@ export default function LoadingStep() {
               <div className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-emerald-100 bg-gradient-to-br from-white to-gray-50 shadow-lg">
                 <span
                   className="animate-bounce text-3xl"
-                  style={{ animationDelay: '0.1s' }}
-                >
+                  style={{ animationDelay: '0.1s' }}>
                   {veggies[currentVeggie]}
                 </span>
               </div>
@@ -96,20 +94,17 @@ export default function LoadingStep() {
             </div>
             <div
               className="absolute top-8 right-6 animate-pulse text-xl opacity-50"
-              style={{ animationDelay: '0.5s' }}
-            >
+              style={{ animationDelay: '0.5s' }}>
               🍅
             </div>
             <div
               className="absolute bottom-6 left-4 animate-pulse text-lg opacity-40"
-              style={{ animationDelay: '1s' }}
-            >
+              style={{ animationDelay: '1s' }}>
               🥕
             </div>
             <div
               className="absolute right-8 bottom-8 animate-pulse text-xl opacity-55"
-              style={{ animationDelay: '1.5s' }}
-            >
+              style={{ animationDelay: '1.5s' }}>
               🥒
             </div>
           </div>

@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { unstable_ViewTransition as ViewTransition } from 'react';
 
-import { Button } from '@/shared/components/atoms/Button';
-import MascotWithParticles from '@/shared/components/molecules/MascotWithParticles';
+import MascotWithParticles from '@/features/onboarding/components/MascotWithParticles';
+import { Button } from '@/shared/components/ui/Button';
 
 export const metadata: Metadata = {
   title: '30초 만에 찾는 완벽한 맞춤 샐러드 | 샐러드만세',
