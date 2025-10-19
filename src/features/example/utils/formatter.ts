@@ -1,4 +1,4 @@
-import { ExampleItem } from "@/features/example/model/types";
+import { ExampleItem } from '@/features/example/model/types';
 
 export function formatExampleItem(item: ExampleItem) {
   return {

@@ -1,6 +1,6 @@
 import { Children, type ComponentProps, type PropsWithChildren } from 'react';
 
-import { Button } from '@/shared/components/atoms/Button';
+import { Button } from '@/shared/components/ui/Button';
 import { cn } from '@/shared/utils';
 
 function StepNavigationRoot({ children }: PropsWithChildren) {
@@ -16,8 +16,7 @@ function StepNavigationRoot({ children }: PropsWithChildren) {
         className={cn('grid h-[60px]', {
           'grid-cols-1': childCount === 1,
           'grid-cols-2': childCount === 2,
-        })}
-      >
+        })}>
         {children}
       </div>
     </div>
@@ -33,8 +32,7 @@ function PreviousButton({
     <Button
       variant="outline"
       className={cn('h-full rounded-none bg-white text-base', className)}
-      {...props}
-    >
+      {...props}>
       {children || '이전'}
     </Button>
   );
@@ -48,8 +46,7 @@ function NextButton({
   return (
     <Button
       className={cn('h-full rounded-none text-base', className)}
-      {...props}
-    >
+      {...props}>
       {children || '다음'}
     </Button>
   );

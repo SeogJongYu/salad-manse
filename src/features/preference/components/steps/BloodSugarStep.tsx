@@ -1,21 +1,21 @@
 import { useState } from 'react';
 
-import StepNavigation from '@/features/preference/components/molecules/StepNavigation';
-import { bloodPressureOptions } from '@/features/preference/constants/options';
-import { RadioGroup } from '@/shared/components/atoms/RadioGroup';
-import RadioCard from '@/shared/components/molecules/RadioCard';
+import StepNavigation from '@/features/preference/components/StepNavigation';
+import { bloodSugarOptions } from '@/features/preference/constants/options';
+import RadioCard from '@/shared/components/ui/RadioCard';
+import { RadioGroup } from '@/shared/components/ui/RadioGroup';
 
-interface BloodPressureStepProps {
+interface BloodSugarStepProps {
   defaultValue?: string;
   onNext: (value: string) => void;
   onPrevious: () => void;
 }
 
-export default function BloodPressureStep({
+export default function BloodSugarStep({
   defaultValue,
   onNext,
   onPrevious,
-}: BloodPressureStepProps) {
+}: BloodSugarStepProps) {
   const [selectedValue, setSelectedValue] = useState<string | undefined>(
     defaultValue,
   );
@@ -23,16 +23,15 @@ export default function BloodPressureStep({
   return (
     <div>
       <div className="mb-6 text-center">
-        <div className="mb-2 text-3xl">❤️</div>
-        <h2 className="mb-2 text-xl font-bold text-rose-700">혈압 관리</h2>
-        <p className="text-sm text-rose-600">혈압은 어떤 편인가요?</p>
+        <div className="mb-2 text-3xl">🍯</div>
+        <h2 className="mb-2 text-xl font-bold text-sky-700">혈당 관리</h2>
+        <p className="text-sm text-sky-600">혈당은 어떤 편인가요?</p>
       </div>
       <RadioGroup
         value={selectedValue}
         className="grid grid-cols-1 gap-4 lg:grid-cols-2"
-        onValueChange={setSelectedValue}
-      >
-        {bloodPressureOptions.map(option => (
+        onValueChange={setSelectedValue}>
+        {bloodSugarOptions.map(option => (
           <RadioCard
             key={option.value}
             id={option.value}
@@ -50,8 +49,9 @@ export default function BloodPressureStep({
           onClick={() => {
             if (!selectedValue) return;
             onNext(selectedValue);
-          }}
-        />
+          }}>
+          결과보기
+        </StepNavigation.Next>
       </StepNavigation>
     </div>
   );

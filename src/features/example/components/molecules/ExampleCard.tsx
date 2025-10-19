@@ -3,7 +3,7 @@ import { XIcon } from 'lucide-react';
 
 import { ExampleItem } from '@/features/example/model/types';
 import { formatExampleItem } from '@/features/example/utils/formatter';
-import { Card } from '@/shared/components/molecules/Card';
+import { Card } from '@/shared/components/ui/Card';
 import { cn } from '@/shared/utils';
 
 interface ExampleCardProps {
