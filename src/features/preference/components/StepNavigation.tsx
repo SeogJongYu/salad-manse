@@ -16,7 +16,8 @@ function StepNavigationRoot({ children }: PropsWithChildren) {
         className={cn('grid h-[60px]', {
           'grid-cols-1': childCount === 1,
           'grid-cols-2': childCount === 2,
-        })}>
+        })}
+      >
         {children}
       </div>
     </div>
@@ -32,7 +33,8 @@ function PreviousButton({
     <Button
       variant="outline"
       className={cn('h-full rounded-none bg-white text-base', className)}
-      {...props}>
+      {...props}
+    >
       {children || '이전'}
     </Button>
   );
@@ -46,7 +48,8 @@ function NextButton({
   return (
     <Button
       className={cn('h-full rounded-none text-base', className)}
-      {...props}>
+      {...props}
+    >
       {children || '다음'}
     </Button>
   );

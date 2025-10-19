@@ -30,7 +30,8 @@ export default function HealthGoalStep({
       <RadioGroup
         value={selectedValue}
         className="grid grid-cols-1 gap-4 lg:grid-cols-2"
-        onValueChange={setSelectedValue}>
+        onValueChange={setSelectedValue}
+      >
         {healthGoalOptions.map(option => (
           <RadioCard
             key={option.value}
