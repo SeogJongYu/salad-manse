@@ -2,23 +2,20 @@ import { useState } from 'react';
 
 import StepNavigation from '@/features/preference/components/molecules/StepNavigation';
 import { healthGoalOptions } from '@/features/preference/constants/options';
-import type { PreferencePayload } from '@/features/preference/types';
 import { RadioGroup } from '@/shared/components/atoms/RadioGroup';
 import RadioCard from '@/shared/components/molecules/RadioCard';
 
 interface HealthGoalStepProps {
-  defaultValue?: HealthGoalStepData;
-  onNext: (value: HealthGoalStepData) => void;
+  defaultValue?: string;
+  onNext: (value: string) => void;
 }
-
-type HealthGoalStepData = Pick<PreferencePayload, 'goal'>;
 
 export default function HealthGoalStep({
   defaultValue,
   onNext,
 }: HealthGoalStepProps) {
-  const [selectedValue, setSelectedValue] = useState<HealthGoalStepData | null>(
-    defaultValue || null,
+  const [selectedValue, setSelectedValue] = useState<string | undefined>(
+    defaultValue,
   );
 
   return (
@@ -31,9 +28,9 @@ export default function HealthGoalStep({
         </p>
       </div>
       <RadioGroup
-        value={selectedValue?.goal}
+        value={selectedValue}
         className="grid grid-cols-1 gap-4 lg:grid-cols-2"
-        onValueChange={value => setSelectedValue({ goal: value })}
+        onValueChange={setSelectedValue}
       >
         {healthGoalOptions.map(option => (
           <RadioCard
