@@ -1,10 +1,8 @@
-import { ArrowRight } from 'lucide-react';
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { unstable_ViewTransition as ViewTransition } from 'react';
 
 import MascotWithParticles from '@/features/onboarding/components/MascotWithParticles';
-import { Button } from '@/shared/components/ui/Button';
+import StartCtaButton from '@/features/onboarding/components/StartCtaButton';
 
 export const metadata: Metadata = {
   title: '30초 만에 찾는 완벽한 맞춤 샐러드 | 샐러드만세',
@@ -64,12 +62,7 @@ export default function Home() {
                   몇 가지 간단한 질문으로 내 몸에 꼭 맞는 샐러드 조합과 레시피를
                   추천받으세요.
                 </p>
-                <Link href="/preference?step=1">
-                  <Button size="xl" className="w-full">
-                    내 맞춤 샐러드 찾기
-                    <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                  </Button>
-                </Link>
+                <StartCtaButton />
               </div>
 
               <div className="order-1 flex w-full justify-center">

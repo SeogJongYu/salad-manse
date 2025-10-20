@@ -1,19 +1,24 @@
 'use client';
-import { unstable_ViewTransition as ViewTransition } from 'react';
 
 import BloodPressureStep from '@/features/preference/components/steps/BloodPressureStep';
 import BloodSugarStep from '@/features/preference/components/steps/BloodSugarStep';
 import CholesterolStep from '@/features/preference/components/steps/CholesterolStep';
 import HealthGoalStep from '@/features/preference/components/steps/HealthGoalStep';
-import LoadingStep from '@/features/preference/components/steps/LoadingStep';
 import {
   PreferenceStoreHydrationBoundary,
   usePreferenceStore,
 } from '@/features/preference/providers/PreferenceStoreProvider';
+import type { PreferenceData } from '@/features/preference/store/PreferenceStore';
 import { Progress } from '@/shared/components/ui/Progress';
 import { useQueryState } from '@/shared/hooks/useQueryState';
 
-export default function PreferenceStepFlow() {
+interface PreferenceStepFlowProps {
+  onSubmit: (values: PreferenceData) => void;
+}
+
+export default function PreferenceStepFlow({
+  onSubmit,
+}: PreferenceStepFlowProps) {
   const preferenceData = usePreferenceStore(state => state.data);
   const setField = usePreferenceStore(state => state.setField);
   const [queryState, setQueryState] = useQueryState<{ step: string }>();
@@ -31,8 +36,18 @@ export default function PreferenceStepFlow() {
     setQueryState(prev => ({ ...prev, step: String(Number(prev.step) + 1) }));
   }
 
+  function handleSubmit(key: keyof typeof preferenceData, value: string) {
+    setField(key, value);
+    const submitData = {
+      ...preferenceData,
+      [key]: value,
+    };
+
+    onSubmit(submitData);
+  }
+
   return (
-    <ViewTransition>
+    <>
       {currentStep <= 4 && (
         <Progress value={currentStep - 1} max={4} className="mb-8" />
       )}
@@ -62,12 +77,11 @@ export default function PreferenceStepFlow() {
         {currentStep === 4 && (
           <BloodSugarStep
             defaultValue={preferenceData?.blood_sugar ?? undefined}
-            onNext={value => handleNext('blood_sugar', value)}
+            onNext={value => handleSubmit('blood_sugar', value)}
             onPrevious={handlePrevious}
           />
         )}
-        {currentStep === 5 && <LoadingStep />}
       </PreferenceStoreHydrationBoundary>
-    </ViewTransition>
+    </>
   );
 }
