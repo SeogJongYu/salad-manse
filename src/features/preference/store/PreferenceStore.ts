@@ -12,7 +12,7 @@ export type PreferenceStore = {
   reset: () => void;
 };
 
-type PreferenceData = {
+export type PreferenceData = {
   goal: string | null;
   blood_pressure: string | null;
   cholesterol: string | null;

@@ -1,12 +1,13 @@
-import PreferenceStepFlow from '@/features/preference/components/steps/PreferenceStepFlow';
-import { PreferenceStoreProvider } from '@/features/preference/providers/PreferenceStoreProvider';
+import { unstable_ViewTransition as ViewTransition } from 'react';
+
+import PreferenceContainer from '@/features/preference/components/PreferenceContainer';
 
 export default function PreferencePage() {
   return (
     <div className="h-(--content-height) px-4 pt-4 pb-[60px]">
-      <PreferenceStoreProvider>
-        <PreferenceStepFlow />
-      </PreferenceStoreProvider>
+      <ViewTransition>
+        <PreferenceContainer />
+      </ViewTransition>
     </div>
   );
 }
