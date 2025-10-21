@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
 import { PreferenceStoreProvider } from '@/features/preference/providers/PreferenceStoreProvider';
+import { Toaster } from '@/shared/components/ui/Sonner';
 import { ReactScan } from '@/shared/modules/ReactScan';
 
 import './globals.css';
@@ -34,6 +35,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <PreferenceStoreProvider>{children}</PreferenceStoreProvider>
+        <Toaster />
       </body>
     </html>
   );

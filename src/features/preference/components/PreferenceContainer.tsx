@@ -1,28 +1,48 @@
 'use client';
 
-import {
-  useTransition,
-  unstable_ViewTransition as ViewTransition,
-} from 'react';
+import type { TagKey } from '@prisma/client';
+import { unstable_ViewTransition as ViewTransition } from 'react';
+import { toast } from 'sonner';
 
-import AnalyzingLoaderDialog from '@/features/preference/components/AnalyzingLoaderDialog';
 import PreferenceStepFlow from '@/features/preference/components/steps/PreferenceStepFlow';
 import type { PreferenceData } from '@/features/preference/store/PreferenceStore';
+import { requestCustomizedSalad } from '@/features/salad/api/actions';
 
 export default function PreferenceContainer() {
-  const [isPending, startTransition] = useTransition();
+  async function handleSubmit(values: PreferenceData) {
+    const params = [values.goal] as TagKey[];
 
-  function handleSubmit(values: PreferenceData) {
-    console.log('values:', values);
-    startTransition(async () => {
-      await new Promise(resolve => setTimeout(resolve, 3000));
-    });
+    if (values.blood_pressure === 'high_blood_pressure') {
+      params.push(values.blood_pressure);
+    } else if (values.cholesterol === 'high_cholesterol') {
+      params.push(values.cholesterol);
+    } else if (values.blood_sugar === 'high_blood_sugar') {
+      params.push(values.blood_sugar);
+    }
+
+    try {
+      const result = await requestCustomizedSalad({
+        goal: values.goal as TagKey,
+        tagKeys: params,
+      });
+
+      if (result.success) {
+        toast.success('선호도 설정이 완료되었습니다!');
+        console.log('story:', result.data?.saladStory);
+      } else {
+        toast.error(result.error);
+      }
+    } catch (error) {
+      console.error('Error submitting preference data:', error);
+      toast.error(
+        '서버와의 통신 중 오류가 발생했습니다. 잠시후 다시 시도해주세요.',
+      );
+    }
   }
 
   return (
     <ViewTransition>
       <PreferenceStepFlow onSubmit={handleSubmit} />
-      <AnalyzingLoaderDialog open={isPending} />
     </ViewTransition>
   );
 }

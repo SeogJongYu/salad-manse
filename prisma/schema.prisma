@@ -9,39 +9,40 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
 // 재료 카테고리를 위한 Enum
 enum Category {
-  BASE     // 잎채소 등 베이스
-  PROTEIN  // 단백질
-  FAT      // 건강한 지방
-  TOPPING  // 기타 토핑
+  BASE // 잎채소 등 베이스
+  PROTEIN // 단백질
+  FAT // 건강한 지방
+  TOPPING // 기타 토핑
   DRESSING // 드레싱
 }
 
 // 재료의 모든 정보를 담는 '재료 도감'
 model Ingredient {
-  id    Int @id @default(autoincrement())
-  name  String @unique // 재료 이름 (예: 케일, 시금치)
-  category Category      // 재료 분류 (예: 채소, 과일, 견과류)
-  description String    // 목록에서 보여줄 간단한 한 줄 설명
-  imageUrl String?      // 이미지 URL
+  id             Int      @id @default(autoincrement())
+  name           String   @unique // 재료 이름 (예: 케일, 시금치)
+  category       Category // 재료 분류 (예: 채소, 과일, 견과류)
+  description    String // 목록에서 보여줄 간단한 한 줄 설명
+  imageUrl       String? // 이미지 URL
   // --- 100g 기준 영양 정보 ---
-  calories       Float  // 칼로리 (kcal)
-  protein        Float  // 단백질 (g)
-  carbohydrate   Float  // 탄수화물 (g)
-  fat            Float  // 지방 (g)
+  calories       Float // 칼로리 (kcal)
+  protein        Float // 단백질 (g)
+  carbohydrate   Float // 탄수화물 (g)
+  fat            Float // 지방 (g)
   // --- 건강 효능 (JSON 배열) ---
   healthBenefits Json?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   // --- 관계 설정 ---
-  tags           IngredientTag[]
+  tags                 IngredientTag[]
+  SaladStoryIngredient SaladStoryIngredient[]
 }
 
 enum TagKey {
@@ -55,43 +56,56 @@ enum TagKey {
 }
 
 model Tag {
-  id          Int  @id @default(autoincrement())
-  key         TagKey  @unique // 시스템이 사용할 고유 키 (예: high_blood_pressure)
+  id  Int    @id @default(autoincrement())
+  key TagKey @unique // 시스템이 사용할 고유 키 (예: high_blood_pressure)
 
   // 이 태그가 어떤 재료들과 연결되는지에 대한 관계
   ingredients IngredientTag[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt  
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
 }
 
 // 재료와 태그의 다대다 관계를 위한 연결 테이블
 model IngredientTag {
-  id           Int @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
   ingredientId Int
   tag          Tag        @relation(fields: [tagId], references: [id])
   tagId        Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt  
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 
   // ✨ (재료+태그) 조합의 중복을 막기 위한 unique 제약 조건 추가
   @@unique([ingredientId, tagId])
 }
 
+model SaladStory {
+  id      String @id @default(cuid())
+  title   String // 샐러드 스토리 이름 (예: "고단백 다이어트 샐러드")
+  summary String @db.Text // 샐러드 스토리 본문
+  // ...
 
-// --- 부가 기능 모델 ---
+  // ✨ 이 스토리에 어떤 재료들이 포함되는지 연결
+  ingredients SaladStoryIngredient[]
 
-// // AI가 생성한 스토리를 캐싱하기 위한 '레시피 북'
-// model SaladStory {
-//   id        Int   @id @default(autoincrement())
-//   // '재료 조합 + 사용자 목적'을 해싱한 고유 키. 캐싱의 핵심.
-//   storyHash String   @unique 
-//   saladName String
-//   description String   @db.Text
-//   healthTip String
-//   createdAt DateTime @default(now())
-// }
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ✨ 2. [신규] 샐러드 스토리 ↔ 재료 연결 테이블
+model SaladStoryIngredient {
+  id Int @id @default(autoincrement())
+
+  story   SaladStory @relation(fields: [storyId], references: [id])
+  storyId String
+
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredientId Int
+
+  // 한 샐러드에 같은 재료가 중복 등록되는 것을 방지
+  @@unique([storyId, ingredientId])
+}
 
 // // 사용자 선택을 기록하여 트렌드를 분석하기 위한 '주문 기록부'
 // model RecommendationLog {
