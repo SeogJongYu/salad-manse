@@ -1,49 +1,38 @@
 'use client';
 
+import { unstable_Activity as Activity, useState } from 'react';
+
+import AnalyzingLoaderDialog from '@/features/preference/components/AnalyzingLoaderDialog';
 import BloodPressureStep from '@/features/preference/components/steps/BloodPressureStep';
 import BloodSugarStep from '@/features/preference/components/steps/BloodSugarStep';
 import CholesterolStep from '@/features/preference/components/steps/CholesterolStep';
 import HealthGoalStep from '@/features/preference/components/steps/HealthGoalStep';
-import {
-  PreferenceStoreHydrationBoundary,
-  usePreferenceStore,
-} from '@/features/preference/providers/PreferenceStoreProvider';
+import { usePreferenceStep } from '@/features/preference/hooks/usePreferenceStep';
+import { PreferenceStoreHydrationBoundary } from '@/features/preference/providers/PreferenceStoreProvider';
 import type { PreferenceData } from '@/features/preference/store/PreferenceStore';
 import { Progress } from '@/shared/components/ui/Progress';
-import { useQueryState } from '@/shared/hooks/useQueryState';
 
 interface PreferenceStepFlowProps {
-  onSubmit: (values: PreferenceData) => void;
+  onSubmit: (values: PreferenceData) => Promise<void>;
 }
 
 export default function PreferenceStepFlow({
   onSubmit,
 }: PreferenceStepFlowProps) {
-  const preferenceData = usePreferenceStore(state => state.data);
-  const setField = usePreferenceStore(state => state.setField);
-  const [queryState, setQueryState] = useQueryState<{ step: string }>();
-  const currentStep = Number(queryState.step) || 1;
+  const { preferenceData, setField, currentStep, handleNext, handlePrevious } =
+    usePreferenceStep();
+  const [isPending, setIsPending] = useState(false);
 
-  function handlePrevious() {
-    setQueryState(prev => ({
-      ...prev,
-      step: String(Number(prev.step) - 1),
-    }));
-  }
-
-  function handleNext(key: keyof typeof preferenceData, value: string) {
-    setField(key, value);
-    setQueryState(prev => ({ ...prev, step: String(Number(prev.step) + 1) }));
-  }
-
-  function handleSubmit(key: keyof typeof preferenceData, value: string) {
+  async function handleSubmit(key: keyof typeof preferenceData, value: string) {
     setField(key, value);
     const submitData = {
       ...preferenceData,
       [key]: value,
     };
 
-    onSubmit(submitData);
+    setIsPending(true);
+    await onSubmit(submitData);
+    setIsPending(false);
   }
 
   return (
@@ -53,35 +42,36 @@ export default function PreferenceStepFlow({
       )}
 
       <PreferenceStoreHydrationBoundary>
-        {currentStep === 1 && (
+        <Activity mode={currentStep === 1 ? 'visible' : 'hidden'}>
           <HealthGoalStep
-            defaultValue={preferenceData?.goal ?? undefined}
+            defaultValue={preferenceData?.goal}
             onNext={value => handleNext('goal', value)}
-            key={preferenceData?.goal ? 'load' : 'loading'}
           />
-        )}
-        {currentStep === 2 && (
+        </Activity>
+        <Activity mode={currentStep === 2 ? 'visible' : 'hidden'}>
           <BloodPressureStep
-            defaultValue={preferenceData?.blood_pressure ?? undefined}
+            defaultValue={preferenceData?.blood_pressure}
             onNext={value => handleNext('blood_pressure', value)}
             onPrevious={handlePrevious}
           />
-        )}
-        {currentStep === 3 && (
+        </Activity>
+        <Activity mode={currentStep === 3 ? 'visible' : 'hidden'}>
           <CholesterolStep
-            defaultValue={preferenceData?.cholesterol ?? undefined}
+            defaultValue={preferenceData?.cholesterol}
             onNext={value => handleNext('cholesterol', value)}
             onPrevious={handlePrevious}
           />
-        )}
-        {currentStep === 4 && (
+        </Activity>
+        <Activity mode={currentStep === 4 ? 'visible' : 'hidden'}>
           <BloodSugarStep
-            defaultValue={preferenceData?.blood_sugar ?? undefined}
+            defaultValue={preferenceData?.blood_sugar}
             onNext={value => handleSubmit('blood_sugar', value)}
             onPrevious={handlePrevious}
           />
-        )}
+        </Activity>
       </PreferenceStoreHydrationBoundary>
+
+      <AnalyzingLoaderDialog open={isPending} />
     </>
   );
 }

@@ -13,17 +13,17 @@ export type PreferenceStore = {
 };
 
 export type PreferenceData = {
-  goal: string | null;
-  blood_pressure: string | null;
-  cholesterol: string | null;
-  blood_sugar: string | null;
+  goal: string;
+  blood_pressure: string;
+  cholesterol: string;
+  blood_sugar: string;
 };
 
 const INIT_DATA: PreferenceData = {
-  goal: null,
-  blood_pressure: null,
-  cholesterol: null,
-  blood_sugar: null,
+  goal: '',
+  blood_pressure: '',
+  cholesterol: '',
+  blood_sugar: '',
 };
 
 export function createPreferenceStore() {
