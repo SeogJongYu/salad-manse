@@ -6,13 +6,11 @@ import { Label } from '@/shared/components/ui/Label';
 interface CheckboxCardProps extends ComponentProps<typeof Checkbox> {
   label?: string;
   description?: string;
-  value: string; // CheckboxCard의 고유 값
 }
 
 export default function CheckboxCard({
   label,
   description,
-  value,
   ...checkboxProps
 }: CheckboxCardProps) {
   return (

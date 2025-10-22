@@ -42,6 +42,9 @@ export default function AnalyzingLoaderDialog(
       <Dialog.Content>
         <Dialog.Header>
           <Dialog.Title>샐러드를 분석 중입니다...</Dialog.Title>
+          <Dialog.Description className="sr-only">
+            샐러드 분석중
+          </Dialog.Description>
         </Dialog.Header>
         <div className="flex h-full items-center justify-center">
           <div className="w-full max-w-md space-y-8 text-center">

@@ -7,7 +7,7 @@ export default function InteractionLayout({ children }: PropsWithChildren) {
     <div className="bg-background min-h-dvh">
       <Header />
       <div className="pt-(--header-height)">
-        <main className="container mx-auto">{children}</main>
+        <main>{children}</main>
       </div>
     </div>
   );

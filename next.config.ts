@@ -5,6 +5,14 @@ const nextConfig: NextConfig = {
   experimental: {
     viewTransition: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'xpctnjdfnedyvgmzuznb.supabase.co',
+      },
+    ],
+  },
 };
 
 export default nextConfig;
