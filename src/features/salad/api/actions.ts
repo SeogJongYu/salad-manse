@@ -2,7 +2,9 @@
 
 import { Category, type SaladStory, type TagKey } from '@prisma/client';
 import { shuffle } from 'lodash-es';
+import { unstable_cache } from 'next/cache';
 
+import type { SaladStoryWithIngredients } from '@/features/salad/types';
 import { getRuleByGoal } from '@/features/salad/utils/getRuleByGoal';
 import { prisma } from '@/shared/lib/prisma';
 
@@ -205,19 +207,34 @@ export async function requestCustomizedSalad(params: GetResultParams) {
   }
 }
 
-export async function getSaladStory(id: string) {
-  const results = await prisma.saladStory.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      ingredients: {
-        include: {
-          ingredient: true,
+export const getSaladStoryDetail = unstable_cache(
+  async (saladId: string): Promise<SaladStoryWithIngredients | null> => {
+    const results = await prisma.saladStory.findUnique({
+      where: {
+        id: saladId,
+      },
+      include: {
+        ingredients: {
+          include: {
+            ingredient: {
+              include: {
+                tags: {
+                  include: {
+                    tag: true,
+                  },
+                },
+              },
+            },
+          },
         },
       },
-    },
-  });
+    });
 
-  return results;
-}
+    return results;
+  },
+  ['salad-story-by-id'],
+  {
+    revalidate: false,
+    tags: ['salad-stories'],
+  },
+);

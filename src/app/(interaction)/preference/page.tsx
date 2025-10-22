@@ -4,7 +4,7 @@ import PreferenceContainer from '@/features/preference/components/PreferenceCont
 
 export default function PreferencePage() {
   return (
-    <div className="h-(--content-height) px-4 pt-4 pb-[60px]">
+    <div className="container mx-auto h-(--content-height) px-4 pt-4 pb-[60px]">
       <ViewTransition>
         <PreferenceContainer />
       </ViewTransition>

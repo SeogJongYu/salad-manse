@@ -19,8 +19,6 @@ export async function POST(request: NextRequest) {
       prompt: getPrompt(categories, goal),
     });
 
-    console.log('object:', object);
-
     return NextResponse.json({
       success: true,
       data: object,

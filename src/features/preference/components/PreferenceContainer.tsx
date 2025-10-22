@@ -1,6 +1,7 @@
 'use client';
 
 import type { TagKey } from '@prisma/client';
+import { useRouter } from 'next/navigation';
 import { unstable_ViewTransition as ViewTransition } from 'react';
 import { toast } from 'sonner';
 
@@ -9,6 +10,8 @@ import type { PreferenceData } from '@/features/preference/store/PreferenceStore
 import { requestCustomizedSalad } from '@/features/salad/api/actions';
 
 export default function PreferenceContainer() {
+  const router = useRouter();
+
   async function handleSubmit(values: PreferenceData) {
     const params = [values.goal] as TagKey[];
 
@@ -26,9 +29,8 @@ export default function PreferenceContainer() {
         tagKeys: params,
       });
 
-      if (result.success) {
-        toast.success('선호도 설정이 완료되었습니다!');
-        console.log('story:', result.data?.saladStory);
+      if (result.success && result.data) {
+        router.push(`/salads/${result.data.saladStory?.id}`);
       } else {
         toast.error(result.error);
       }
