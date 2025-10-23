@@ -13,7 +13,7 @@ interface SaladContentProps {
   data: SaladStoryWithIngredients;
 }
 
-export default async function SaladContent({ data }: SaladContentProps) {
+export default async function SaladStoryContent({ data }: SaladContentProps) {
   const ingredientGroup = Object.groupBy(
     data.ingredients,
     item => item.ingredient.category,
@@ -43,37 +43,27 @@ export default async function SaladContent({ data }: SaladContentProps) {
           <div className="grid grid-cols-1 gap-x-10 gap-y-8 lg:grid-cols-2">
             <SaladCategoryGroup category={Category.BASE}>
               {(ingredientGroup.BASE ?? []).map(item => (
-                <Link key={item.id} href="/">
-                  <IngredientCard ingredient={item.ingredient} />
-                </Link>
+                <IngredientCard key={item.id} ingredient={item.ingredient} />
               ))}
             </SaladCategoryGroup>
             <SaladCategoryGroup category={Category.PROTEIN}>
               {(ingredientGroup.PROTEIN ?? []).map(item => (
-                <Link key={item.id} href="/">
-                  <IngredientCard ingredient={item.ingredient} />
-                </Link>
+                <IngredientCard key={item.id} ingredient={item.ingredient} />
               ))}
             </SaladCategoryGroup>
             <SaladCategoryGroup category={Category.FAT}>
               {(ingredientGroup.FAT ?? []).map(item => (
-                <Link key={item.id} href="/">
-                  <IngredientCard ingredient={item.ingredient} />
-                </Link>
+                <IngredientCard key={item.id} ingredient={item.ingredient} />
               ))}
             </SaladCategoryGroup>
             <SaladCategoryGroup category={Category.TOPPING}>
               {(ingredientGroup.TOPPING ?? []).map(item => (
-                <Link key={item.id} href="/">
-                  <IngredientCard ingredient={item.ingredient} />
-                </Link>
+                <IngredientCard key={item.id} ingredient={item.ingredient} />
               ))}
             </SaladCategoryGroup>
             <SaladCategoryGroup category={Category.DRESSING}>
               {(ingredientGroup.DRESSING ?? []).map(item => (
-                <Link key={item.id} href="/">
-                  <IngredientCard ingredient={item.ingredient} />
-                </Link>
+                <IngredientCard key={item.id} ingredient={item.ingredient} />
               ))}
             </SaladCategoryGroup>
           </div>

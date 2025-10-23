@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
         hostname: 'xpctnjdfnedyvgmzuznb.supabase.co',
       },
     ],
+    minimumCacheTTL: 2678400, // 31 days
   },
 };
 

@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation';
 import { unstable_ViewTransition as ViewTransition } from 'react';
 
 import { getSaladStoryDetail } from '@/features/salad/api/actions';
-import SaladContent from '@/features/salad/components/SaladContent';
+import SaladStoryContent from '@/features/salad/components/SaladStoryContent';
+import { supabase } from '@/shared/lib/supabase';
 
 interface SaladDetailPageProps {
   params: Promise<{
@@ -52,9 +53,32 @@ export default async function SaladDetailPage({
     notFound();
   }
 
+  const imageOptIngredients = saladDetail.ingredients.map(ingredientItem => ({
+    ...ingredientItem,
+    ingredient: {
+      ...ingredientItem.ingredient,
+      imageUrl: ingredientItem.ingredient.imageUrl
+        ? supabase.storage
+            .from('assets')
+            .getPublicUrl(ingredientItem.ingredient.imageUrl, {
+              transform: {
+                width: 400,
+                height: 400,
+                quality: 80,
+              },
+            }).data.publicUrl
+        : '',
+    },
+  }));
+
   return (
     <ViewTransition>
-      <SaladContent data={saladDetail} />
+      <SaladStoryContent
+        data={{
+          ...saladDetail,
+          ingredients: imageOptIngredients,
+        }}
+      />
     </ViewTransition>
   );
 }
