@@ -27,3 +27,13 @@ export type IngredientWithTags = Prisma.IngredientGetPayload<{
     };
   };
 }>;
+
+export type IngredientDetail = Prisma.IngredientGetPayload<{
+  include: {
+    tags: {
+      include: {
+        tag: true;
+      };
+    };
+  };
+}>;

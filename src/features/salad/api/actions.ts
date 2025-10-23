@@ -238,3 +238,43 @@ export const getSaladStoryDetail = unstable_cache(
     tags: ['salad-stories'],
   },
 );
+
+// export async function getIngredientDetail(id: number) {
+//   const results = prisma.ingredient.findUnique({
+//     where: {
+//       id,
+//     },
+//     include: {
+//       tags: true,
+//     },
+//   });
+
+//   return results;
+// }
+
+// export async function getIngredientDetail(ingredientId: number) {
+//   const getCachedIngredient = unstable_cache(
+//     async () => {
+//       const results = prisma.ingredient.findUnique({
+//         where: {
+//           id: ingredientId,
+//         },
+//         include: {
+//           tags: {
+//             include: {
+//               tag: true,
+//             },
+//           },
+//         },
+//       });
+
+//       return results;
+//     },
+//     ['ingredient-detail', `${ingredientId}`],
+//     {
+//       revalidate: false,
+//       tags: ['ingredients', `${ingredientId}`],
+//     },
+//   );
+//   return getCachedIngredient();
+// }
