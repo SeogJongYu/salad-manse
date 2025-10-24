@@ -7,13 +7,14 @@ export default function MascotWithParticles() {
         <Image
           src="/mascot.png"
           alt="Friendly Salad Mascot"
-          fill
+          width={1024}
+          height={1024}
+          sizes="(min-width: 1024px) 450px, 280px"
           className="drop-shadow-2xl"
           priority
         />
       </div>
 
-      {/* Floating Elements */}
       {/* Main floating circles - 양상추 그린 계열 */}
       <div className="animate-bounce-slow absolute top-3 right-2 size-12 rounded-full bg-emerald-400/70 shadow-lg shadow-emerald-200/50 lg:top-10 lg:right-10 lg:size-16" />
       <div className="animate-bounce-slower absolute bottom-8 left-2 size-10 rounded-full bg-green-300/60 shadow-lg shadow-green-200/40 lg:bottom-20 lg:left-10 lg:size-12" />
