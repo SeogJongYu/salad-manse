@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { unstable_ViewTransition as ViewTransition } from 'react';
 
-import { getSaladStoryDetail } from '@/features/salad/api/actions';
+import { getSaladStoryDetail } from '@/features/salad/api/db';
 import SaladStoryContent from '@/features/salad/components/SaladStoryContent';
 import { supabase } from '@/shared/lib/supabase';
 
@@ -27,7 +27,6 @@ export async function generateMetadata({
 
   return {
     title: `${saladStory.title ?? '맞춤 샐러드 결과'} | 샐러드만세`,
-
     description: saladStory.summary ?? '당신을 위한 맞춤 샐러드와 건강 스토리',
     openGraph: {
       title: saladStory.title ?? '맞춤 샐러드 결과',

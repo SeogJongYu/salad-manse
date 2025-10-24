@@ -2,128 +2,16 @@
 
 import { Category, type SaladStory, type TagKey } from '@prisma/client';
 import { shuffle } from 'lodash-es';
-import { unstable_cache } from 'next/cache';
 
-import type { SaladStoryWithIngredients } from '@/features/salad/types';
+import {
+  createSaladStory,
+  findDuplicatedSalad,
+  getIngredientsByTags,
+} from '@/features/salad/api/db';
+import { generateSaladStoryData } from '@/features/salad/api/openai.service';
 import { getRuleByGoal } from '@/features/salad/utils/getRuleByGoal';
-import { prisma } from '@/shared/lib/prisma';
 
-export async function getIngredientsByTags(tagKeys: TagKey[]) {
-  const result = await prisma.ingredient.findMany({
-    where: {
-      tags: {
-        some: {
-          tag: {
-            key: { in: tagKeys },
-          },
-        },
-      },
-    },
-    select: {
-      id: true,
-      name: true,
-      category: true,
-      tags: {
-        include: {
-          tag: {
-            select: {
-              key: true,
-            },
-          },
-        },
-      },
-    },
-  });
-
-  return result;
-}
-
-async function findDuplicatedSalad(ingredientIds: number[]) {
-  const targetIds = ingredientIds; // [1, 2, 3, 4, 5, 6]
-
-  const result = await prisma.saladStory.findFirst({
-    where: {
-      ingredients: {
-        every: {
-          ingredientId: {
-            in: targetIds,
-          },
-        },
-      },
-    },
-    include: {
-      ingredients: {
-        include: {
-          ingredient: true,
-        },
-      },
-    },
-  });
-
-  return result;
-}
-
-async function generateSaladStoryData(params: {
-  goal: TagKey;
-  categories: Record<Category, string[]>;
-}): Promise<{ title: string; summary: string }> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/salad/story`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        goal: params.goal,
-        categories: params.categories,
-      }),
-    },
-  );
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(
-      `[${response.statusText}] Failed to request salad story: ${errorData.error}`,
-    );
-  }
-
-  const result = await response.json();
-  return result.data;
-}
-
-async function createSaladStory({
-  title,
-  summary,
-  ingredientIds,
-}: {
-  title: string;
-  summary: string;
-  ingredientIds: number[];
-}) {
-  const result = await prisma.saladStory.create({
-    data: {
-      title: title,
-      summary: summary,
-      ingredients: {
-        createMany: {
-          data: ingredientIds.map(ingredientId => ({
-            ingredientId,
-          })),
-        },
-      },
-    },
-  });
-
-  return result;
-}
-
-interface GetResultParams {
-  goal: TagKey;
-  tagKeys: TagKey[];
-}
-
-export type SaladStoryResponse =
+export type CustomizedSaladResponse =
   | {
       success: true;
       data: {
@@ -135,65 +23,31 @@ export type SaladStoryResponse =
       error: string;
     };
 
-export async function requestCustomizedSalad(params: GetResultParams) {
+/**
+ * 샐러드 추천의 전체 흐름을 관리합니다.
+ */
+export async function requestCustomizedSalad(params: {
+  goal: TagKey;
+  tagKeys: TagKey[];
+}): Promise<CustomizedSaladResponse> {
   try {
     const rule = getRuleByGoal(params.goal);
-
     const ingredients = await getIngredientsByTags(params.tagKeys);
-    const queue = shuffle(ingredients).sort(
-      (a, b) => a.tags.length - b.tags.length,
+
+    const { saladComponents, groupedIngredientNames } = assembleSalad(
+      ingredients,
+      rule,
     );
 
-    const saladComponents = [];
-    const groupedIngredientNames: Record<Category, string[]> = {
-      [Category.BASE]: [],
-      [Category.PROTEIN]: [],
-      [Category.TOPPING]: [],
-      [Category.FAT]: [],
-      [Category.DRESSING]: [],
-    };
-    let remain = Object.values(rule!).reduce((a, b) => a + b, 0);
-
-    while (queue.length > 0 && remain > 0) {
-      const target = queue.pop();
-      if (target && rule[target.category] > 0) {
-        saladComponents.push(target);
-        groupedIngredientNames[target.category].push(target.name);
-        rule[target.category] -= 1;
-        remain -= 1;
-      }
-    }
-
-    let saladStoryResult;
-
-    const duplicatedSaladStory = await findDuplicatedSalad(
-      saladComponents.map(i => i.id),
+    const saladStory = await findOrCreateSaladStory(
+      saladComponents,
+      groupedIngredientNames,
+      params.goal,
     );
-
-    if (duplicatedSaladStory) {
-      saladStoryResult = duplicatedSaladStory;
-    }
-
-    if (!duplicatedSaladStory) {
-      const storyData = await generateSaladStoryData({
-        goal: params.goal,
-        categories: groupedIngredientNames,
-      });
-
-      const createdStory = await createSaladStory({
-        title: storyData.title,
-        summary: storyData.summary,
-        ingredientIds: saladComponents.map(i => i.id),
-      });
-
-      saladStoryResult = createdStory;
-    }
 
     return {
       success: true,
-      data: {
-        saladStory: saladStoryResult,
-      },
+      data: { saladStory },
     };
   } catch (error) {
     console.error('Error in getSaladStory:', error);
@@ -207,74 +61,73 @@ export async function requestCustomizedSalad(params: GetResultParams) {
   }
 }
 
-export const getSaladStoryDetail = unstable_cache(
-  async (saladId: string): Promise<SaladStoryWithIngredients | null> => {
-    const results = await prisma.saladStory.findUnique({
-      where: {
-        id: saladId,
-      },
-      include: {
-        ingredients: {
-          include: {
-            ingredient: {
-              include: {
-                tags: {
-                  include: {
-                    tag: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    });
+/**
+ * 샐러드 조립
+ * @description 규칙(rule)에 따라 재료(ingredients)를 조합합니다.
+ */
+function assembleSalad(
+  ingredients: Awaited<ReturnType<typeof getIngredientsByTags>>,
+  rule: ReturnType<typeof getRuleByGoal>,
+) {
+  const candidates = shuffle(ingredients).sort(
+    (a, b) => a.tags.length - b.tags.length,
+  );
 
-    return results;
-  },
-  ['salad-story-by-id'],
-  {
-    revalidate: false,
-    tags: ['salad-stories'],
-  },
-);
+  const saladComponents = [];
+  const groupedIngredientNames: Record<Category, string[]> = {
+    [Category.BASE]: [],
+    [Category.PROTEIN]: [],
+    [Category.TOPPING]: [],
+    [Category.FAT]: [],
+    [Category.DRESSING]: [],
+  };
+  let remain = Object.values(rule!).reduce((a, b) => a + b, 0);
 
-// export async function getIngredientDetail(id: number) {
-//   const results = prisma.ingredient.findUnique({
-//     where: {
-//       id,
-//     },
-//     include: {
-//       tags: true,
-//     },
-//   });
+  while (candidates.length > 0 && remain > 0) {
+    const target = candidates.pop();
+    if (target && rule[target.category] > 0) {
+      saladComponents.push(target);
+      groupedIngredientNames[target.category].push(target.name);
+      rule[target.category] -= 1;
+      remain -= 1;
+    }
+  }
 
-//   return results;
-// }
+  return { saladComponents, groupedIngredientNames };
+}
 
-// export async function getIngredientDetail(ingredientId: number) {
-//   const getCachedIngredient = unstable_cache(
-//     async () => {
-//       const results = prisma.ingredient.findUnique({
-//         where: {
-//           id: ingredientId,
-//         },
-//         include: {
-//           tags: {
-//             include: {
-//               tag: true,
-//             },
-//           },
-//         },
-//       });
+/**
+ * 샐러드 스토리 찾기 또는 생성 (DB/AI 로직)
+ * @description 조합된 재료로 중복 스토리를 찾고, 없으면 AI로 새로 생성합니다.
+ */
+async function findOrCreateSaladStory(
+  saladComponents: ReturnType<typeof assembleSalad>['saladComponents'],
+  groupedIngredientNames: ReturnType<
+    typeof assembleSalad
+  >['groupedIngredientNames'],
+  goal: TagKey,
+) {
+  const ingredientIds = saladComponents.map(i => i.id);
 
-//       return results;
-//     },
-//     ['ingredient-detail', `${ingredientId}`],
-//     {
-//       revalidate: false,
-//       tags: ['ingredients', `${ingredientId}`],
-//     },
-//   );
-//   return getCachedIngredient();
-// }
+  // 1. 중복 확인
+  const duplicatedSaladStory = await findDuplicatedSalad(ingredientIds);
+
+  // 2. 중복이 있으면 즉시 반환
+  if (duplicatedSaladStory) {
+    return duplicatedSaladStory;
+  }
+
+  // 3. 중복이 없으면 새로 생성
+  const storyData = await generateSaladStoryData({
+    goal,
+    categories: groupedIngredientNames,
+  });
+
+  const createdStory = await createSaladStory({
+    title: storyData.title,
+    summary: storyData.summary,
+    ingredientIds: ingredientIds,
+  });
+
+  return createdStory;
+}

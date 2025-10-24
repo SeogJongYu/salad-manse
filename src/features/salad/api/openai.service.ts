@@ -1,14 +1,12 @@
 import { openai } from '@ai-sdk/openai';
-import type { Category } from '@prisma/client';
+import type { Category, TagKey } from '@prisma/client';
 import { generateObject } from 'ai';
-import { NextResponse, type NextRequest } from 'next/server';
 import { z } from 'zod';
 
-export async function POST(request: NextRequest) {
-  const data = await request.json();
-  const categories = data.categories as Record<Category, string[]>;
-  const goal = data.goal as string;
-
+export async function generateSaladStoryData(params: {
+  goal: TagKey;
+  categories: Record<Category, string[]>;
+}): Promise<{ title: string; summary: string }> {
   try {
     const { object } = await generateObject({
       model: openai('gpt-4o'),
@@ -16,22 +14,13 @@ export async function POST(request: NextRequest) {
         title: z.string(),
         summary: z.string(),
       }),
-      prompt: getPrompt(categories, goal),
+      prompt: getPrompt(params.categories, params.goal),
     });
 
-    return NextResponse.json({
-      success: true,
-      data: object,
-    });
+    return object;
   } catch (error) {
     console.error('Error generating salad story:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: '샐러드 스토리를 생성하는 데 실패했습니다.',
-      },
-      { status: 500 },
-    );
+    throw new Error('샐러드 스토리를 생성하는 데 실패했습니다.');
   }
 }
 
