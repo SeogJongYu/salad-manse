@@ -21,27 +21,6 @@ export const metadata: Metadata = {
     '샐러드 조합',
     '건강식단 추천',
   ],
-  openGraph: {
-    title: '샐러드만세 - 30초 만에 찾는 완벽한 맞춤 샐러드',
-    description:
-      '몇 가지 간단한 질문으로 내 몸에 꼭 맞는 샐러드 조합과 레시피를 추천받으세요.',
-    type: 'website',
-    images: [
-      {
-        url: '/og-home.png', // 홈페이지 전용 OG 이미지
-        width: 1200,
-        height: 630,
-        alt: '샐러드만세 메인페이지 - 맞춤 샐러드 추천 시작하기',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: '샐러드만세 - 30초 만에 찾는 완벽한 맞춤 샐러드',
-    description:
-      '몇 가지 간단한 질문으로 내 몸에 꼭 맞는 샐러드 조합과 레시피를 추천받으세요.',
-    images: ['/og-home.png'],
-  },
   alternates: {
     canonical: '/',
   },
