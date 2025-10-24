@@ -693,4 +693,112 @@ export const ingredients = [
       },
     ],
   },
+  {
+    name: '올리브 오일 (엑스트라 버진)',
+    category: Category.FAT,
+    description: '지중해 식단의 핵심, 단일 불포화지방산이 풍부한 건강한 오일',
+    calories: 884,
+    protein: 0,
+    carbohydrate: 0,
+    fat: 100,
+    healthBenefits: [
+      {
+        title: '심혈관 건강 증진',
+        description:
+          '풍부한 단일 불포화지방산(올레산)이 나쁜 콜레스테롤(LDL) 수치를 낮추고 혈관 건강을 지켜줍니다.',
+      },
+      {
+        title: '강력한 항산화 및 항염 효과',
+        description:
+          '올레오칸탈, 폴리페놀 등 항산화 성분이 체내 염증을 줄이고 세포 노화를 방지하는 데 도움을 줍니다.',
+      },
+    ],
+  },
+  {
+    name: '치아씨드',
+    category: Category.FAT,
+    description: '수분을 만나면 10배 불어나는, 오메가-3와 식이섬유의 왕',
+    calories: 486,
+    protein: 17,
+    carbohydrate: 42,
+    fat: 31,
+    healthBenefits: [
+      {
+        title: '높은 포만감과 체중 조절',
+        description:
+          '물을 흡수해 젤 형태로 팽창하여 적은 양으로도 포만감을 주어 체중 감량에 도움을 줍니다.',
+      },
+      {
+        title: '식후 혈당 안정화',
+        description:
+          '풍부한 수용성 식이섬유가 탄수화물의 소화 흡수 속도를 늦춰 혈당이 급격히 오르는 것을 방지합니다.',
+      },
+    ],
+  },
+  {
+    name: '호박씨',
+    category: Category.FAT,
+    description: '고소한 맛과 풍부한 마그네슘, 아연을 함유한 영양 간식',
+    calories: 574,
+    protein: 30,
+    carbohydrate: 15,
+    fat: 49,
+    healthBenefits: [
+      {
+        title: '마그네슘과 아연 풍부',
+        description:
+          '풍부한 마그네슘은 혈압 조절과 뼈 건강에, 아연은 면역 체계 강화에 중요한 역할을 합니다.',
+      },
+      {
+        title: '심혈관 건강 지원',
+        description:
+          '불포화지방산과 항산화 성분이 풍부하여 콜레스테롤 수치를 개선하고 심장 건강을 돕습니다.',
+      },
+    ],
+  },
+  {
+    name: '캐슈넛',
+    category: Category.FAT,
+    description: '부드러운 식감과 고소한 단맛, 철분과 마그네슘이 풍부한 견과류',
+    calories: 553,
+    protein: 18,
+    carbohydrate: 30,
+    fat: 44,
+    healthBenefits: [
+      {
+        title: '빈혈 예방 및 뼈 건강',
+        description:
+          '철분 함량이 높아 빈혈 예방에 도움을 주며, 마그네슘과 비타민 K가 뼈를 튼튼하게 합니다.',
+      },
+      {
+        title: '낮은 혈당 지수(GI)',
+        description:
+          '혈당지수(GI)가 낮아 당뇨가 있거나 혈당 관리가 필요한 사람들에게 좋은 간식입니다.',
+      },
+    ],
+  },
+  {
+    name: '페타 치즈',
+    category: Category.FAT,
+    description: '지중해 샐러드의 꽃, 짭조름한 풍미와 단백질을 더해주는 치즈',
+    calories: 265,
+    protein: 14,
+    carbohydrate: 4,
+    fat: 21,
+    healthBenefits: [
+      {
+        title: '단백질 및 칼슘 공급원',
+        description:
+          '양유나 염소유로 만들어져 풍부한 단백질과 칼슘을 제공하며 뼈 건강에 도움을 줍니다.',
+      },
+      {
+        title: '풍미 향상 및 나트륨 조절 용이',
+        description:
+          '맛이 짭짤하여 소량만 사용해도 샐러드 전체의 풍미를 살려주므로, 총 나트륨 섭취 조절에 유리할 수 있습니다.',
+      },
+    ],
+  },
 ];
+
+const a = ingredients.map(d => d.name);
+console.log('>>>a:', a);
