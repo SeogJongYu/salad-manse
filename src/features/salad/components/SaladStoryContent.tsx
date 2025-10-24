@@ -1,4 +1,3 @@
-import { Category } from '@prisma/client';
 import { ArrowLeft, RefreshCw, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
@@ -26,7 +25,7 @@ export default async function SaladStoryContent({ data }: SaladContentProps) {
           <Sparkles className="size-3.5!" />
           맞춤 추천
         </Badge>
-        <h1 className="text-4xl font-bold text-balance text-white lg:text-5xl">
+        <h1 className="text-4xl font-bold text-pretty text-white lg:text-5xl">
           {data.title}
         </h1>
         <p className="mx-auto max-w-2xl text-lg leading-relaxed font-medium text-pretty text-white">
@@ -41,27 +40,27 @@ export default async function SaladStoryContent({ data }: SaladContentProps) {
           </h2>
 
           <div className="grid grid-cols-1 gap-x-10 gap-y-8 lg:grid-cols-2">
-            <SaladCategoryGroup category={Category.BASE}>
+            <SaladCategoryGroup title="베이스">
               {(ingredientGroup.BASE ?? []).map(item => (
                 <IngredientCard key={item.id} ingredient={item.ingredient} />
               ))}
             </SaladCategoryGroup>
-            <SaladCategoryGroup category={Category.PROTEIN}>
+            <SaladCategoryGroup title="단백질">
               {(ingredientGroup.PROTEIN ?? []).map(item => (
                 <IngredientCard key={item.id} ingredient={item.ingredient} />
               ))}
             </SaladCategoryGroup>
-            <SaladCategoryGroup category={Category.FAT}>
+            <SaladCategoryGroup title="지방">
               {(ingredientGroup.FAT ?? []).map(item => (
                 <IngredientCard key={item.id} ingredient={item.ingredient} />
               ))}
             </SaladCategoryGroup>
-            <SaladCategoryGroup category={Category.TOPPING}>
+            <SaladCategoryGroup title="토핑">
               {(ingredientGroup.TOPPING ?? []).map(item => (
                 <IngredientCard key={item.id} ingredient={item.ingredient} />
               ))}
             </SaladCategoryGroup>
-            <SaladCategoryGroup category={Category.DRESSING}>
+            <SaladCategoryGroup title="드레싱">
               {(ingredientGroup.DRESSING ?? []).map(item => (
                 <IngredientCard key={item.id} ingredient={item.ingredient} />
               ))}

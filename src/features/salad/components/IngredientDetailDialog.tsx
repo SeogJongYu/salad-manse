@@ -1,8 +1,10 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import type { ComponentProps, ReactNode } from 'react';
 
+import HealthTagBadge from '@/features/salad/components/HealthTagBadge';
 import type { IngredientDetail } from '@/features/salad/types';
 import { Button } from '@/shared/components/ui/Button';
 import { Card } from '@/shared/components/ui/Card';
@@ -38,7 +40,10 @@ export default function IngredientDetailDialog({
         <ScrollArea className="h-[70vh]">
           <div className="pb-0.5">
             <div className="grid gap-6 px-0 sm:grid-cols-2 sm:px-4">
-              <div className="relative mx-auto aspect-square max-h-[400px] w-full sm:max-h-none">
+              <motion.div
+                className="relative aspect-square max-h-[400px] w-full sm:max-h-none"
+                layoutId={`ingradient-${ingredient.id}-thumbnail`}
+              >
                 <Image
                   src={ingredient.imageUrl || '/placeholder.svg'}
                   fill
@@ -46,13 +51,32 @@ export default function IngredientDetailDialog({
                   className="sm:rounded-lg"
                   unoptimized
                 />
-              </div>
+                <div className="absolute top-0 left-0 w-full p-1.5">
+                  <div className="flex flex-wrap gap-1">
+                    {ingredient.tags.map(tag => (
+                      <HealthTagBadge
+                        key={tag.id}
+                        tag={tag.tag.key}
+                        className="rounded-lg px-2 py-0.5 text-base"
+                      />
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
               <div className="space-y-4 px-4 sm:px-0">
                 <div>
-                  <h1 className="mb-2 text-4xl font-bold">{ingredient.name}</h1>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <motion.h1
+                    className="mb-2 text-4xl font-bold"
+                    layoutId={`ingradient-${ingredient.id}-name`}
+                  >
+                    {ingredient.name}
+                  </motion.h1>
+                  <motion.p
+                    className="text-muted-foreground leading-relaxed"
+                    layoutId={`ingradient-${ingredient.id}-description`}
+                  >
                     {ingredient.description}
-                  </p>
+                  </motion.p>
                 </div>
               </div>
             </div>

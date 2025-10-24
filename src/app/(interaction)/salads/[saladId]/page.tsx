@@ -62,8 +62,8 @@ export default async function SaladDetailPage({
             .from('assets')
             .getPublicUrl(ingredientItem.ingredient.imageUrl, {
               transform: {
-                width: 400,
-                height: 400,
+                width: 500,
+                height: 500,
                 quality: 80,
               },
             }).data.publicUrl

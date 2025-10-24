@@ -1,9 +1,10 @@
 import { TagKey } from '@prisma/client';
-import React from 'react';
+import { type ComponentProps } from 'react';
 
 import { Badge } from '@/shared/components/ui/Badge';
+import { cn } from '@/shared/utils';
 
-interface HealthTagBadgeProps {
+interface HealthTagBadgeProps extends ComponentProps<typeof Badge> {
   tag: TagKey;
 }
 
@@ -23,10 +24,18 @@ const tagConfig: Partial<Record<TagKey, { className: string; label: string }>> =
     },
   };
 
-export default function HealthTagBadge({ tag }: HealthTagBadgeProps) {
+export default function HealthTagBadge({
+  tag,
+  className,
+  ...props
+}: HealthTagBadgeProps) {
   const config = tagConfig[tag];
 
   if (!config) return null;
 
-  return <Badge className={config.className}>{config.label}</Badge>;
+  return (
+    <Badge className={cn(config.className, className)} {...props}>
+      {config.label}
+    </Badge>
+  );
 }

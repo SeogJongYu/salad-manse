@@ -1,19 +1,16 @@
-import type { Category } from '@prisma/client';
 import { type PropsWithChildren } from 'react';
 
 interface SaladCategoryGroupProps {
-  category: Category;
+  title: string;
 }
 
 export default function SaladCategoryGroup({
-  category,
+  title,
   children,
 }: PropsWithChildren<SaladCategoryGroupProps>) {
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold tracking-wide uppercase">
-        {category}
-      </h3>
+      <h3 className="text-lg font-bold tracking-wide">{title}</h3>
       <div className="grid grid-cols-2 gap-4 lg:gap-6">
         {children || (
           <div className="text-muted-foreground col-span-full text-center text-sm">
