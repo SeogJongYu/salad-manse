@@ -24,15 +24,15 @@ export default function PreferenceContainer() {
     }
 
     try {
-      const result = await requestCustomizedSalad({
+      const response = await requestCustomizedSalad({
         goal: values.goal as TagKey,
         tagKeys: params,
       });
 
-      if (result.success && result.data) {
-        router.push(`/salads/${result.data.saladStory?.id}`);
+      if (response.success) {
+        router.push(`/salads/${response.data.saladStory.id}`);
       } else {
-        toast.error(result.error);
+        toast.error(response.error);
       }
     } catch (error) {
       console.error('Error submitting preference data:', error);
