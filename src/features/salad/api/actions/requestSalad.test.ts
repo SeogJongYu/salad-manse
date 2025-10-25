@@ -1,5 +1,6 @@
-import { Category, TagKey } from '@prisma/client';
+import { Category } from '@prisma/client';
 
+import type { PreferenceData } from '@/features/preference/types';
 import { requestSalad } from '@/features/salad/api/actions/requestSalad';
 import {
   getIngredientsByTags,
@@ -9,22 +10,19 @@ import {
 import { generateSaladStoryData } from '@/features/salad/api/openai.service';
 import { assembleSalad } from '@/features/salad/utils/assembleSalad';
 import { getRuleByGoal } from '@/features/salad/utils/getRuleByGoal';
+import { getValidTags } from '@/features/salad/utils/getValidTags';
 
 jest.mock('@/features/salad/utils/assembleSalad');
-jest.mock('@/features/salad/api/db', () => ({
-  getIngredientsByTags: jest.fn(),
-  findDuplicatedSalad: jest.fn(),
-  createSaladStory: jest.fn(),
-}));
-jest.mock('@/features/salad/api/openai.service', () => ({
-  generateSaladStoryData: jest.fn(),
-}));
+jest.mock('@/features/salad/utils/getValidTags');
+jest.mock('@/features/salad/api/db');
+jest.mock('@/features/salad/api/openai.service');
 jest.mock('@/features/salad/utils/getRuleByGoal');
 jest.mock('lodash-es', () => ({
   shuffle: jest.fn(array => [...array]),
 }));
 
 const mockedAssembleSalad = assembleSalad as jest.Mock;
+const mockedGetValidTags = getValidTags as jest.Mock;
 const mockedGetIngredientsByTags = getIngredientsByTags as jest.Mock;
 const mockedFindDuplicatedSalad = findDuplicatedSalad as jest.Mock;
 const mockedCreateSaladStory = createSaladStory as jest.Mock;
@@ -32,9 +30,11 @@ const mockedGenerateSaladStoryData = generateSaladStoryData as jest.Mock;
 const mockedGetRuleByGoal = getRuleByGoal as jest.Mock; // 👈 여기!
 
 describe('requestSalad (서버 액션)', () => {
-  const mockParams: { goal: TagKey; tagKeys: TagKey[] } = {
-    goal: TagKey.overall_health,
-    tagKeys: [TagKey.overall_health, TagKey.high_blood_pressure],
+  const mockValues: PreferenceData = {
+    goal: 'muscle_gain',
+    blood_pressure: 'high_blood_pressure',
+    cholesterol: 'normal_cholesterol', // 서버가 필터링할 값
+    blood_sugar: 'unknown_blood_sugar', // 서버가 필터링할 값
   };
   const mockAssembled = {
     saladComponents: [{ id: 10, name: '닭가슴살' }],
@@ -46,6 +46,7 @@ describe('requestSalad (서버 액션)', () => {
    */
   it('중복 샐러드가 없으면, AI로 스토리를 생성하고 새 샐러드를 반환해야 한다', async () => {
     mockedGetRuleByGoal.mockReturnValue({ FAKE_RULE: 1 });
+    mockedGetValidTags.mockReturnValue(['high_blood_pressure']);
     mockedGetIngredientsByTags.mockReturnValue([]);
     mockedAssembleSalad.mockReturnValue(mockAssembled);
 
@@ -60,7 +61,10 @@ describe('requestSalad (서버 액션)', () => {
       title: '스토리 제목',
     });
 
-    const result = await requestSalad(mockParams);
+    const result = await requestSalad(
+      { success: false, error: '' },
+      mockValues,
+    );
 
     expect(result.success).toBe(true);
 
@@ -77,6 +81,7 @@ describe('requestSalad (서버 액션)', () => {
    */
   it('중복 샐러드를 발견하면, AI/DB 호출 없이 기존 샐러드를 반환해야 한다', async () => {
     mockedGetRuleByGoal.mockReturnValue({ FAKE_RULE: 1 });
+    mockedGetValidTags.mockReturnValue(['high_blood_pressure']);
     mockedGetIngredientsByTags.mockReturnValue([]);
     mockedAssembleSalad.mockReturnValue(mockAssembled);
 
@@ -86,7 +91,10 @@ describe('requestSalad (서버 액션)', () => {
       title: '기존 샐러드',
     });
 
-    const result = await requestSalad(mockParams);
+    const result = await requestSalad(
+      { success: false, error: '' },
+      mockValues,
+    );
 
     expect(result.success).toBe(true);
 
@@ -105,7 +113,10 @@ describe('requestSalad (서버 액션)', () => {
     const errorMessage = 'DB Connection Failed';
     mockedGetIngredientsByTags.mockRejectedValue(new Error(errorMessage));
 
-    const result = await requestSalad(mockParams);
+    const result = await requestSalad(
+      { success: false, error: '' },
+      mockValues,
+    );
 
     expect(result.success).toBe(false);
 
@@ -121,11 +132,16 @@ describe('requestSalad (서버 액션)', () => {
     const errorMessage = '그냥 문자열 에러';
     mockedGetIngredientsByTags.mockRejectedValue(errorMessage); // 👈 new Error()가 아님
 
-    const result = await requestSalad(mockParams);
+    const result = await requestSalad(
+      { success: false, error: '' },
+      mockValues,
+    );
 
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error).toBe('샐러드 스토리를 가져오는 데 실패했습니다.');
+      expect(result.error).toBe(
+        '샐러드 추천에 실패했습니다. 잠시 후 다시 시도해주세요.',
+      );
     }
 
     expect(mockedAssembleSalad).not.toHaveBeenCalled();

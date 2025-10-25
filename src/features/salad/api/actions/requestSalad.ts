@@ -1,5 +1,8 @@
-import { type SaladStory, type TagKey } from '@prisma/client';
+'use server';
 
+import { TagKey, type SaladStory } from '@prisma/client';
+
+import type { PreferenceData } from '@/features/preference/types';
 import {
   createSaladStory,
   findDuplicatedSalad,
@@ -8,8 +11,9 @@ import {
 import { generateSaladStoryData } from '@/features/salad/api/openai.service';
 import { assembleSalad } from '@/features/salad/utils/assembleSalad';
 import { getRuleByGoal } from '@/features/salad/utils/getRuleByGoal';
+import { getValidTags } from '@/features/salad/utils/getValidTags';
 
-export type CustomizedSaladResponse =
+export type SaladResponse =
   | {
       success: true;
       data: {
@@ -22,15 +26,20 @@ export type CustomizedSaladResponse =
     };
 
 /**
- * 샐러드 추천의 전체 흐름을 관리합니다.
+ * 샐러드 추천을 요청하는 메인 서버 액션.
+ * useActionState와 호환되는 시그니처를 가집니다.
+ *
+ * @param prevState - React(useActionState)가 관리하는 이전 상태값 (이 로직에서는 사용하지 않음)
+ * @param values - 클라이언트가 보낸 "날것"의 PreferenceData
  */
-export async function requestSalad(params: {
-  goal: TagKey;
-  tagKeys: TagKey[];
-}): Promise<CustomizedSaladResponse> {
+export async function requestSalad(
+  prevState: SaladResponse,
+  values: PreferenceData,
+): Promise<SaladResponse> {
   try {
-    const rule = getRuleByGoal(params.goal);
-    const ingredients = await getIngredientsByTags(params.tagKeys);
+    const rule = getRuleByGoal(values.goal as TagKey);
+    const validTags = getValidTags(values);
+    const ingredients = await getIngredientsByTags(validTags);
 
     const { saladComponents, groupedIngredientNames } = assembleSalad(
       ingredients,
@@ -40,7 +49,7 @@ export async function requestSalad(params: {
     const saladStory = await findOrCreateSaladStory(
       saladComponents,
       groupedIngredientNames,
-      params.goal,
+      values.goal as TagKey,
     );
 
     return {
@@ -48,13 +57,13 @@ export async function requestSalad(params: {
       data: { saladStory },
     };
   } catch (error) {
-    console.error('Error in getSaladStory:', error);
+    console.error('Error in requestSalad:', error);
     return {
       success: false,
       error:
         error instanceof Error
           ? error.message
-          : '샐러드 스토리를 가져오는 데 실패했습니다.',
+          : '샐러드 추천에 실패했습니다. 잠시 후 다시 시도해주세요.',
     };
   }
 }
