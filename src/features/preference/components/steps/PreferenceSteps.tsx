@@ -12,15 +12,15 @@ import { PreferenceStoreHydrationBoundary } from '@/features/preference/provider
 import type { PreferenceData } from '@/features/preference/types';
 import { Progress } from '@/shared/components/ui/Progress';
 
-interface PreferenceStepFlowProps {
+interface PreferenceStepsProps {
   onSubmit: (values: PreferenceData) => void;
   isPending: boolean;
 }
 
-export default function PreferenceStepFlow({
+export default function PreferenceSteps({
   onSubmit,
   isPending,
-}: PreferenceStepFlowProps) {
+}: PreferenceStepsProps) {
   const { preferenceData, setField, currentStep, handleNext, handlePrevious } =
     usePreferenceStep();
 
