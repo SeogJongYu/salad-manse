@@ -4,10 +4,10 @@ import { useRouter } from 'next/navigation';
 import { startTransition, useActionState, useEffect } from 'react';
 import { toast } from 'sonner';
 
-import PreferenceStepFlow from '@/features/preference/components/steps/PreferenceStepFlow';
+import PreferenceSteps from '@/features/preference/components/steps/PreferenceSteps';
 import { requestSalad } from '@/features/salad/api/actions/requestSalad';
 
-export default function PreferenceContainer() {
+export default function PreferenceFlow() {
   const router = useRouter();
   const [state, submitAction, isPending] = useActionState(requestSalad, {
     success: false,
@@ -23,7 +23,7 @@ export default function PreferenceContainer() {
   }, [state, router]);
 
   return (
-    <PreferenceStepFlow
+    <PreferenceSteps
       onSubmit={values => {
         startTransition(() => {
           submitAction(values);
