@@ -1,6 +1,6 @@
 'use client';
 
-import { unstable_Activity as Activity, useState } from 'react';
+import { unstable_Activity as Activity } from 'react';
 
 import AnalyzingLoaderDialog from '@/features/preference/components/AnalyzingLoaderDialog';
 import BloodPressureStep from '@/features/preference/components/steps/BloodPressureStep';
@@ -9,30 +9,29 @@ import CholesterolStep from '@/features/preference/components/steps/CholesterolS
 import HealthGoalStep from '@/features/preference/components/steps/HealthGoalStep';
 import { usePreferenceStep } from '@/features/preference/hooks/usePreferenceStep';
 import { PreferenceStoreHydrationBoundary } from '@/features/preference/providers/PreferenceStoreProvider';
-import type { PreferenceData } from '@/features/preference/store/PreferenceStore';
+import type { PreferenceData } from '@/features/preference/types';
 import { Progress } from '@/shared/components/ui/Progress';
 
 interface PreferenceStepFlowProps {
-  onSubmit: (values: PreferenceData) => Promise<void>;
+  onSubmit: (values: PreferenceData) => void;
+  isPending: boolean;
 }
 
 export default function PreferenceStepFlow({
   onSubmit,
+  isPending,
 }: PreferenceStepFlowProps) {
   const { preferenceData, setField, currentStep, handleNext, handlePrevious } =
     usePreferenceStep();
-  const [isPending, setIsPending] = useState(false);
 
-  async function handleSubmit(key: keyof typeof preferenceData, value: string) {
+  function handleSubmit(key: keyof typeof preferenceData, value: string) {
     setField(key, value);
     const submitData = {
       ...preferenceData,
       [key]: value,
     };
 
-    setIsPending(true);
-    await onSubmit(submitData);
-    setIsPending(false);
+    onSubmit(submitData);
   }
 
   return (

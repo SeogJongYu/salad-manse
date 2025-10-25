@@ -799,6 +799,3 @@ export const ingredients = [
     ],
   },
 ];
-
-const a = ingredients.map(d => d.name);
-console.log('>>>a:', a);

@@ -1,6 +1,6 @@
-export type PreferencePayload = {
+export type PreferenceData = {
   goal: string;
-  bp: string;
+  blood_pressure: string;
   cholesterol: string;
-  bs: string;
+  blood_sugar: string;
 };
