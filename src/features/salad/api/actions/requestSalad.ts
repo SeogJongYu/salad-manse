@@ -1,7 +1,4 @@
-'use server';
-
-import { Category, type SaladStory, type TagKey } from '@prisma/client';
-import { shuffle } from 'lodash-es';
+import { type SaladStory, type TagKey } from '@prisma/client';
 
 import {
   createSaladStory,
@@ -9,6 +6,7 @@ import {
   getIngredientsByTags,
 } from '@/features/salad/api/db';
 import { generateSaladStoryData } from '@/features/salad/api/openai.service';
+import { assembleSalad } from '@/features/salad/utils/assembleSalad';
 import { getRuleByGoal } from '@/features/salad/utils/getRuleByGoal';
 
 export type CustomizedSaladResponse =
@@ -26,7 +24,7 @@ export type CustomizedSaladResponse =
 /**
  * 샐러드 추천의 전체 흐름을 관리합니다.
  */
-export async function requestCustomizedSalad(params: {
+export async function requestSalad(params: {
   goal: TagKey;
   tagKeys: TagKey[];
 }): Promise<CustomizedSaladResponse> {
@@ -62,45 +60,10 @@ export async function requestCustomizedSalad(params: {
 }
 
 /**
- * 샐러드 조립
- * @description 규칙(rule)에 따라 재료(ingredients)를 조합합니다.
- */
-function assembleSalad(
-  ingredients: Awaited<ReturnType<typeof getIngredientsByTags>>,
-  rule: ReturnType<typeof getRuleByGoal>,
-) {
-  const candidates = shuffle(ingredients).sort(
-    (a, b) => a.tags.length - b.tags.length,
-  );
-
-  const saladComponents = [];
-  const groupedIngredientNames: Record<Category, string[]> = {
-    [Category.BASE]: [],
-    [Category.PROTEIN]: [],
-    [Category.TOPPING]: [],
-    [Category.FAT]: [],
-    [Category.DRESSING]: [],
-  };
-  let remain = Object.values(rule!).reduce((a, b) => a + b, 0);
-
-  while (candidates.length > 0 && remain > 0) {
-    const target = candidates.pop();
-    if (target && rule[target.category] > 0) {
-      saladComponents.push(target);
-      groupedIngredientNames[target.category].push(target.name);
-      rule[target.category] -= 1;
-      remain -= 1;
-    }
-  }
-
-  return { saladComponents, groupedIngredientNames };
-}
-
-/**
  * 샐러드 스토리 찾기 또는 생성 (DB/AI 로직)
  * @description 조합된 재료로 중복 스토리를 찾고, 없으면 AI로 새로 생성합니다.
  */
-async function findOrCreateSaladStory(
+export async function findOrCreateSaladStory(
   saladComponents: ReturnType<typeof assembleSalad>['saladComponents'],
   groupedIngredientNames: ReturnType<
     typeof assembleSalad

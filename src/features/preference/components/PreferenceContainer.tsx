@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 
 import PreferenceStepFlow from '@/features/preference/components/steps/PreferenceStepFlow';
 import type { PreferenceData } from '@/features/preference/store/PreferenceStore';
-import { requestCustomizedSalad } from '@/features/salad/api/actions';
+import { requestSalad } from '@/features/salad/api/actions/requestSalad';
 
 export default function PreferenceContainer() {
   const router = useRouter();
@@ -24,7 +24,7 @@ export default function PreferenceContainer() {
     }
 
     try {
-      const response = await requestCustomizedSalad({
+      const response = await requestSalad({
         goal: values.goal as TagKey,
         tagKeys: params,
       });
