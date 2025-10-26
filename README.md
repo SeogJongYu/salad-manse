@@ -4,7 +4,8 @@
 
 <br>
 
-![샐러드만세 메인 데모 GIF](https://example.com/demo.gif)
+![샐러드만세 메인 데모 GIF](./public/saladmanse-demo.gif?v=3)
+
 <br>
 
 ## 📄 프로젝트 소개 (Overview)
