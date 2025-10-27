@@ -20,7 +20,9 @@ export async function generateSaladStoryData(params: {
     return object;
   } catch (error) {
     console.error('Error generating salad story:', error);
-    throw new Error('샐러드 스토리를 생성하는 데 실패했습니다.');
+    throw new Error(
+      '샐러드 스토리 생성에 일시적인 오류가 발생했습니다. 잠시후 다시 시도해 주세요.',
+    );
   }
 }
 
@@ -45,5 +47,8 @@ function getPrompt(data: Record<Category, string[]>, goal: string) {
       "title": "여기에 제목 작성",
       "summary": "여기에 요약 작성 (2~3문장)"
     }
+    
+    [주의사항]
+    **반드시 JSON 형식만을 응답으로 반환해야 합니다. 다른 텍스트, 설명, 스키마 정보 등은 절대 포함하지 마세요**
   `;
 }
