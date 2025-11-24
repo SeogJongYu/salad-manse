@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Suspense, unstable_ViewTransition as ViewTransition } from 'react';
+import { Suspense } from 'react';
 
 import PreferenceFlow from '@/features/preference/components/PreferenceFlow';
 
@@ -11,11 +11,9 @@ export const metadata: Metadata = {
 export default function PreferencePage() {
   return (
     <div className="container mx-auto h-(--content-height) px-4 pt-4 pb-[60px]">
-      <ViewTransition>
-        <Suspense>
-          <PreferenceFlow />
-        </Suspense>
-      </ViewTransition>
+      <Suspense>
+        <PreferenceFlow />
+      </Suspense>
     </div>
   );
 }
