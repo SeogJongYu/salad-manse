@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { unstable_ViewTransition as ViewTransition } from 'react';
 
 import { getSaladStoryDetail } from '@/features/salad/api/db';
 import SaladStoryContent from '@/features/salad/components/SaladStoryContent';
@@ -75,13 +74,11 @@ export default async function SaladDetailPage({
   }));
 
   return (
-    <ViewTransition>
-      <SaladStoryContent
-        data={{
-          ...saladDetail,
-          ingredients: imageOptIngredients,
-        }}
-      />
-    </ViewTransition>
+    <SaladStoryContent
+      data={{
+        ...saladDetail,
+        ingredients: imageOptIngredients,
+      }}
+    />
   );
 }

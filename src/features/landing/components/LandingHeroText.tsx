@@ -18,7 +18,7 @@ export function LandingHeroText() {
       </p>
       <ResetPreferenceAction>
         <Button asChild size="xl" className="w-full">
-          <Link href="/preference?step=1">
+          <Link href="/preference">
             내 맞춤 샐러드 찾기
             <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
           </Link>
