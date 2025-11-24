@@ -1,0 +1,97 @@
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes float-reverse {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  33% {
+    transform: translateY(-10px) translateX(5px);
+  }
+  66% {
+    transform: translateY(-5px) translateX(-5px);
+  }
+}
+
+@keyframes float-reverse-slow {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  33% {
+    transform: translateY(8px) translateX(-5px);
+  }
+  66% {
+    transform: translateY(12px) translateX(5px);
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1) rotate(45deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2) rotate(90deg);
+  }
+}
+
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animateFloat {
+  animation: float var(--anim-duration, 3s) var(--anim-easing, ease-in-out)
+    var(--anim-iteration, infinite) var(--anim-delay, 0s);
+  will-change: transform;
+}
+
+.animateFloatReverse {
+  animation: float-reverse var(--anim-duration, 3s)
+    var(--anim-easing, ease-in-out) var(--anim-iteration, infinite)
+    var(--anim-delay, 0s);
+  will-change: transform;
+}
+
+.animateFloatReverseSlow {
+  animation: float-reverse-slow var(--anim-duration, 3s)
+    var(--anim-easing, ease-in-out) var(--anim-iteration, infinite)
+    var(--anim-delay, 0s);
+  will-change: transform;
+}
+
+.animateTwinkle {
+  animation: twinkle var(--anim-duration, 2s) var(--anim-easing, ease-in-out)
+    var(--anim-iteration, infinite) var(--anim-delay, 0s);
+  will-change: transform;
+}
+
+.animatePulseSlow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}

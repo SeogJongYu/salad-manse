@@ -5,7 +5,6 @@ import { Toaster } from '@/shared/components/ui/Sonner';
 import { ReactScan } from '@/shared/modules/ReactScan';
 
 import './globals.css';
-import './animations.css';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
