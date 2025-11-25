@@ -6,9 +6,7 @@ export default function InteractionLayout({ children }: PropsWithChildren) {
   return (
     <div className="bg-background min-h-dvh">
       <Header />
-      <div className="pt-(--header-height)">
-        <main>{children}</main>
-      </div>
+      <main className="pt-(--header-height)">{children}</main>
     </div>
   );
 }
