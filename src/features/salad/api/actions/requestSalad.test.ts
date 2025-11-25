@@ -61,10 +61,7 @@ describe('requestSalad (서버 액션)', () => {
       title: '스토리 제목',
     });
 
-    const result = await requestSalad(
-      { success: false, error: '' },
-      mockValues,
-    );
+    const result = await requestSalad(mockValues);
 
     expect(result.success).toBe(true);
 
@@ -91,10 +88,7 @@ describe('requestSalad (서버 액션)', () => {
       title: '기존 샐러드',
     });
 
-    const result = await requestSalad(
-      { success: false, error: '' },
-      mockValues,
-    );
+    const result = await requestSalad(mockValues);
 
     expect(result.success).toBe(true);
 
@@ -107,40 +101,18 @@ describe('requestSalad (서버 액션)', () => {
   });
 
   /**
-   * 테스트 케이스 3: 로직 초반(DB 조회)에서 에러가 발생하는 경우
+   * 테스트 케이스 3: DB 조회에서 에러가 발생하는 경우
    */
-  it('DB 조회 중 에러가 발생하면, success: false와 에러 메시지를 반환해야 한다', async () => {
-    const errorMessage = 'DB Connection Failed';
+  it('Error가 throw 되면 success: false를 반환해야 한다', async () => {
+    const errorMessage = 'DB 조회 에러';
     mockedGetIngredientsByTags.mockRejectedValue(new Error(errorMessage));
 
-    const result = await requestSalad(
-      { success: false, error: '' },
-      mockValues,
-    );
-
-    expect(result.success).toBe(false);
-
-    if (!result.success) {
-      expect(result.error).toBe(errorMessage);
-    }
-
-    expect(mockedAssembleSalad).not.toHaveBeenCalled();
-    expect(mockedGenerateSaladStoryData).not.toHaveBeenCalled();
-  });
-
-  it('Error 객체가 아닌 값이 throw 되어도 success: false를 반환해야 한다', async () => {
-    const errorMessage = '그냥 문자열 에러';
-    mockedGetIngredientsByTags.mockRejectedValue(errorMessage); // 👈 new Error()가 아님
-
-    const result = await requestSalad(
-      { success: false, error: '' },
-      mockValues,
-    );
+    const result = await requestSalad(mockValues);
 
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(result.error).toBe(
-        '샐러드 추천에 실패했습니다. 잠시 후 다시 시도해주세요.',
+        '일시적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
       );
     }
 

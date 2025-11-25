@@ -1,35 +1,29 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { startTransition, useActionState, useEffect } from 'react';
+import { useTransition } from 'react';
 import { toast } from 'sonner';
 
 import PreferenceSteps from '@/features/preference/components/steps/PreferenceSteps';
+import type { PreferenceData } from '@/features/preference/types';
 import { requestSalad } from '@/features/salad/api/actions/requestSalad';
 
 export default function PreferenceFlow() {
   const router = useRouter();
-  const [state, submitAction, isPending] = useActionState(requestSalad, {
-    success: false,
-    error: '',
-  });
+  const [isPending, startTransition] = useTransition();
 
-  useEffect(() => {
-    if (state.success) {
-      router.push(`/salads/${state.data.saladStory.id}`);
-    } else if (state.error) {
-      toast.error(state.error);
-    }
-  }, [state, router]);
+  function handleSubmit(values: PreferenceData) {
+    startTransition(async () => {
+      const response = await requestSalad(values);
 
-  return (
-    <PreferenceSteps
-      onSubmit={values => {
-        startTransition(() => {
-          submitAction(values);
-        });
-      }}
-      isPending={isPending}
-    />
-  );
+      if (!response.success) {
+        toast.error(response.error);
+        return;
+      }
+
+      router.push(`/salads/${response.data.saladStory.id}`);
+    });
+  }
+
+  return <PreferenceSteps onSubmit={handleSubmit} isPending={isPending} />;
 }
