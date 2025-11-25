@@ -27,13 +27,8 @@ export type SaladResponse =
 
 /**
  * 샐러드 추천을 요청하는 메인 서버 액션.
- * useActionState와 호환되는 시그니처를 가집니다.
- *
- * @param prevState - React(useActionState)가 관리하는 이전 상태값 (이 로직에서는 사용하지 않음)
- * @param values - 클라이언트가 보낸 "날것"의 PreferenceData
  */
 export async function requestSalad(
-  prevState: SaladResponse,
   values: PreferenceData,
 ): Promise<SaladResponse> {
   try {
@@ -60,10 +55,7 @@ export async function requestSalad(
     console.error('Error in requestSalad:', error);
     return {
       success: false,
-      error:
-        error instanceof Error
-          ? error.message
-          : '샐러드 추천에 실패했습니다. 잠시 후 다시 시도해주세요.',
+      error: '일시적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
     };
   }
 }
