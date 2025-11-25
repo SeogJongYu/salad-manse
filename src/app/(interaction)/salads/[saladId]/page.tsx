@@ -2,8 +2,10 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { getSaladStoryDetail } from '@/features/salad/api/db';
-import SaladStoryContent from '@/features/salad/components/SaladStoryContent';
-import { supabase } from '@/shared/lib/supabase';
+import SaladStoryActions from '@/features/salad/components/SaladStoryActions';
+import SaladStoryHeader from '@/features/salad/components/SaladStoryHeader';
+import { SaladStoryIngredients } from '@/features/salad/components/SaladStoryIngredients';
+import { optimizeIngredientImages } from '@/features/salad/utils/optimizeIngredientImages';
 
 interface SaladDetailPageProps {
   params: Promise<{
@@ -55,30 +57,19 @@ export default async function SaladDetailPage({
     notFound();
   }
 
-  const imageOptIngredients = saladDetail.ingredients.map(ingredientItem => ({
-    ...ingredientItem,
-    ingredient: {
-      ...ingredientItem.ingredient,
-      imageUrl: ingredientItem.ingredient.imageUrl
-        ? supabase.storage
-            .from('assets')
-            .getPublicUrl(ingredientItem.ingredient.imageUrl, {
-              transform: {
-                width: 500,
-                height: 500,
-                quality: 80,
-              },
-            }).data.publicUrl
-        : '',
-    },
-  }));
-
   return (
-    <SaladStoryContent
-      data={{
-        ...saladDetail,
-        ingredients: imageOptIngredients,
-      }}
-    />
+    <div className="bg-primary">
+      <SaladStoryHeader
+        title={saladDetail.title}
+        summary={saladDetail.summary}
+      />
+
+      <div className="bg-background relative z-10 rounded-t-3xl px-4 py-10 lg:rounded-t-4xl">
+        <SaladStoryIngredients
+          ingredients={optimizeIngredientImages(saladDetail.ingredients)}
+        />
+        <SaladStoryActions />
+      </div>
+    </div>
   );
 }
