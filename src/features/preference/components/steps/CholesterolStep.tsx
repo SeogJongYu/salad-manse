@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { PreferenceStepLayout as Layout } from '@/features/preference/components/PreferenceStepLayout';
 import StepNavigation from '@/features/preference/components/StepNavigation';
 import { cholesterolOptions } from '@/features/preference/constants/options';
 import RadioCard from '@/shared/components/ui/RadioCard';
@@ -21,42 +22,46 @@ export default function CholesterolStep({
   );
 
   return (
-    <div>
-      <div className="mb-6 text-center">
-        <div className="mb-2 text-3xl">🫒</div>
-        <h2 className="mb-2 text-xl font-bold text-amber-700">
-          콜레스테롤 관리
-        </h2>
-        <p className="text-sm text-amber-600">
-          콜레스테롤 수치는 어떤 편인가요?
-        </p>
-      </div>
-      <RadioGroup
-        value={selectedValue}
-        className="grid grid-cols-1 gap-4 lg:grid-cols-2"
-        onValueChange={setSelectedValue}
-      >
-        {cholesterolOptions.map(option => (
-          <RadioCard
-            key={option.value}
-            id={option.value}
-            value={option.value}
-            label={option.label}
-            description={option.description}
-          />
-        ))}
-      </RadioGroup>
+    <Layout>
+      <Layout.Content>
+        <Layout.Header>
+          <Layout.Icon>🫒</Layout.Icon>
+          <Layout.Title className="text-amber-700">
+            콜레스테롤 관리
+          </Layout.Title>
+          <Layout.Description className="text-amber-600">
+            콜레스테롤 수치는 어떤 편인가요?
+          </Layout.Description>
+        </Layout.Header>
+        <RadioGroup
+          value={selectedValue}
+          className="grid grid-cols-1 gap-4 lg:grid-cols-2"
+          onValueChange={setSelectedValue}
+        >
+          {cholesterolOptions.map(option => (
+            <RadioCard
+              key={option.value}
+              id={option.value}
+              value={option.value}
+              label={option.label}
+              description={option.description}
+            />
+          ))}
+        </RadioGroup>
+      </Layout.Content>
 
-      <StepNavigation>
-        <StepNavigation.Previous onClick={onPrevious} />
-        <StepNavigation.Next
-          disabled={!selectedValue}
-          onClick={() => {
-            if (!selectedValue) return;
-            onNext(selectedValue);
-          }}
-        />
-      </StepNavigation>
-    </div>
+      <Layout.Footer>
+        <StepNavigation>
+          <StepNavigation.Previous onClick={onPrevious} />
+          <StepNavigation.Next
+            disabled={!selectedValue}
+            onClick={() => {
+              if (!selectedValue) return;
+              onNext(selectedValue);
+            }}
+          />
+        </StepNavigation>
+      </Layout.Footer>
+    </Layout>
   );
 }

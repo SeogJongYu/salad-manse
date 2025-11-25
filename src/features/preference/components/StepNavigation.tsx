@@ -3,7 +3,7 @@ import { Children, type ComponentProps, type PropsWithChildren } from 'react';
 import { Button } from '@/shared/components/ui/Button';
 import { cn } from '@/shared/utils';
 
-function StepNavigationRoot({ children }: PropsWithChildren) {
+function Root({ children }: PropsWithChildren) {
   const childCount = Children.count(children);
 
   if (childCount === 0 || childCount > 2) {
@@ -11,7 +11,7 @@ function StepNavigationRoot({ children }: PropsWithChildren) {
   }
 
   return (
-    <div className="border-border fixed right-0 bottom-0 left-0 border-t bg-white lg:static lg:mt-8 lg:border-0">
+    <div className="border-border fixed right-0 bottom-0 left-0 border-t bg-white lg:static lg:border-0">
       <div
         className={cn('grid h-[60px]', {
           'grid-cols-1': childCount === 1,
@@ -55,7 +55,7 @@ function NextButton({
   );
 }
 
-const StepNavigation = Object.assign(StepNavigationRoot, {
+const StepNavigation = Object.assign(Root, {
   Previous: PreviousButton,
   Next: NextButton,
 });

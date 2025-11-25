@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function PreferencePage() {
   return (
-    <div className="container mx-auto h-(--content-height) px-4 pt-4 pb-[60px]">
+    <div className="container mx-auto p-4 lg:p-8">
       <Suspense>
         <PreferenceFlow />
       </Suspense>
